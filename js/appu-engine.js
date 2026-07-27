@@ -8,13 +8,13 @@ class APPUChatEngine {
   constructor() {
     this.session = {
       name: localStorage.getItem('appu_user_name') || '',
-      role: localStorage.getItem('appu_user_role') || 'Student', // 'Student' or 'Parent'
+      role: 'Student',
       phone: localStorage.getItem('appu_user_phone') || '',
       grade: localStorage.getItem('appu_user_grade') || 'Class 10',
-      isOnboarded: false
+      favSubject: localStorage.getItem('appu_user_fav_subject') || 'Science',
+      isOnboarded: localStorage.getItem('appu_is_onboarded') === 'true'
     };
 
-    this.session.isOnboarded = !!(this.session.name && this.session.phone);
     this.onboardingStep = 0;
     this.pendingQuery = null;
 
@@ -57,7 +57,9 @@ class APPUChatEngine {
       if (e.key === 'Enter') this.handleUserSubmit();
     });
 
-    this.elements.roleToggleBtn.addEventListener('click', () => this.switchRole());
+    if (this.elements.roleToggleBtn) {
+      this.elements.roleToggleBtn.addEventListener('click', () => this.switchRole());
+    }
 
     if (this.elements.voiceToggleBtn) {
       this.elements.voiceToggleBtn.addEventListener('click', () => this.toggleVoice());
@@ -224,46 +226,38 @@ class APPUChatEngine {
 
   switchRole() {
     this.session.role = this.session.role === 'Student' ? 'Parent' : 'Student';
-    localStorage.setItem('appu_user_role', this.session.role);
     this.updateRoleUI();
-
-    const roleMsg = this.session.role === 'Student' 
-      ? "🌟 Switched to **Student Persona Mode**! I'm ready with fun stories, quick interactive quests, and step-by-step CBSE mastery! What shall we learn today?"
-      : "📊 Switched to **Parent Growth Mode**! I can share structural insights, screen-time reduction strategies, and 40-hour foundation metrics for your child. How can I assist you?";
-
-    this.addAPPUMessage(roleMsg);
   }
 
   updateRoleUI() {
-    const isStudent = this.session.role === 'Student';
-    this.elements.roleBadge.textContent = isStudent ? '🎓 Student Mode' : '📊 Parent Mode';
-    this.elements.roleBadge.className = isStudent ? 'role-tag-indicator' : 'role-tag-indicator parent-mode';
+    if (this.elements.roleBadge) {
+      this.elements.roleBadge.textContent = '🎓 Student Mode';
+      this.elements.roleBadge.className = 'role-tag-indicator';
+    }
 
-    const chips = isStudent ? [
+    const chips = [
       "🎮 2-Min Micro-Quest",
       "🃏 3D Concept Flashcard",
       "🔬 Interactive Ray Diagram",
       "📚 Class 10 Science Syllabus"
-    ] : [
-      "📈 How does APPU boost marks by 30-50%?",
-      "📱 How do we reduce screen time?",
-      "📚 Class 10 Science Syllabus"
     ];
 
-    this.elements.suggestedChips.innerHTML = chips.map(chip => `
-      <button class="chip-btn" onclick="window.appuEngine.handleChipClick('${chip.replace(/'/g, "\\'")}')">${chip}</button>
-    `).join('');
+    if (this.elements.suggestedChips) {
+      this.elements.suggestedChips.innerHTML = chips.map(chip => `
+        <button class="chip-btn" onclick="window.appuEngine.handleChipClick('${chip.replace(/'/g, "\\'")}')">${chip}</button>
+      `).join('');
+    }
   }
 
   renderInitialGreeting() {
-    let text = "";
     if (this.session.isOnboarded) {
-      text = `Namaste ${this.session.name}! 🙏 Appu is so happy to see you back! As a ${this.session.role}, what high school goal or CBSE topic are we conquering today? Remember, every effort you make brings you closer to your dreams! ✨`;
+      const text = `Namaste ${this.session.name}! 🙏 Appu is so happy to see you back! I'm ready to help you master **${this.session.grade} ${this.session.favSubject}**! What topic or doubt shall we conquer today? ✨`;
+      this.addAPPUMessage(text);
     } else {
-      text = `Namaste! 🙏 I'm **APPU**—your personal AI learning companion inspired by love, warmth, and passion for education! Before we start exploring CBSE concepts or syllabus guides, may I know your good name and whether you're a Student or a Parent? 🌟`;
+      const text = `Namaste! 🙏 I'm **APPU**—your personal 1-on-1 AI learning companion! Before we start exploring CBSE concepts, please complete this quick 5-second check-in so I can personalize your learning path! 🌟`;
+      this.addAPPUMessage(text);
+      this.renderOnboardingCard();
     }
-
-    this.addAPPUMessage(text);
   }
 
   handleChipClick(text) {
@@ -281,7 +275,7 @@ class APPUChatEngine {
     // Check Onboarding Guardrail
     if (!this.session.isOnboarded) {
       this.pendingQuery = text;
-      this.triggerOnboardingFlow(text);
+      this.renderOnboardingCard();
       return;
     }
 
@@ -289,35 +283,44 @@ class APPUChatEngine {
     this.processQuery(text);
   }
 
-  triggerOnboardingFlow(userMessage) {
-    if (this.onboardingStep === 0) {
-      this.addAPPUMessage(`I'd love to help you with that! 😊 To personalize your learning insights and deliver study materials straight to your WhatsApp, let's complete a 5-second check-in!`);
-      
-      this.renderOnboardingCard();
-      this.onboardingStep = 1;
-    }
-  }
-
   renderOnboardingCard() {
+    if (document.getElementById('onboardingCard')) return;
+
     const cardHtml = `
       <div class="onboarding-card" id="onboardingCard">
-        <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--accent-gold);">
-          📋 Quick 5-Second Onboarding
+        <div class="onboarding-card-header">
+          📋 Personalise Your APPU Experience
         </div>
+        
         <label>Your Name</label>
         <input type="text" id="obName" placeholder="e.g., Ananya Sharma" value="${this.session.name}">
 
-        <label>I am a:</label>
-        <select id="obRole">
-          <option value="Student" ${this.session.role === 'Student' ? 'selected' : ''}>Student (Grade 6-12)</option>
-          <option value="Parent" ${this.session.role === 'Parent' ? 'selected' : ''}>Parent</option>
+        <label>Select Your Class</label>
+        <select id="obGrade">
+          <option value="Class 6" ${this.session.grade === 'Class 6' ? 'selected' : ''}>Class 6</option>
+          <option value="Class 7" ${this.session.grade === 'Class 7' ? 'selected' : ''}>Class 7</option>
+          <option value="Class 8" ${this.session.grade === 'Class 8' ? 'selected' : ''}>Class 8</option>
+          <option value="Class 9" ${this.session.grade === 'Class 9' ? 'selected' : ''}>Class 9</option>
+          <option value="Class 10" ${this.session.grade === 'Class 10' || !this.session.grade ? 'selected' : ''}>Class 10</option>
+          <option value="Class 11" ${this.session.grade === 'Class 11' ? 'selected' : ''}>Class 11</option>
+          <option value="Class 12" ${this.session.grade === 'Class 12' ? 'selected' : ''}>Class 12</option>
         </select>
 
-        <label>WhatsApp Number (for syllabus & insights)</label>
+        <label>Favourite Subject</label>
+        <select id="obFavSubject">
+          <option value="Science" ${this.session.favSubject === 'Science' ? 'selected' : ''}>Science</option>
+          <option value="Mathematics" ${this.session.favSubject === 'Mathematics' ? 'selected' : ''}>Mathematics</option>
+          <option value="Physics" ${this.session.favSubject === 'Physics' ? 'selected' : ''}>Physics</option>
+          <option value="Chemistry" ${this.session.favSubject === 'Chemistry' ? 'selected' : ''}>Chemistry</option>
+          <option value="Social Studies" ${this.session.favSubject === 'Social Studies' ? 'selected' : ''}>Social Studies</option>
+          <option value="English & AI" ${this.session.favSubject === 'English & AI' ? 'selected' : ''}>English & AI</option>
+        </select>
+
+        <label>WhatsApp Number (for syllabus & progress reports)</label>
         <input type="tel" id="obPhone" placeholder="e.g., 9876543210" value="${this.session.phone}">
 
-        <button class="btn btn-gold" style="width: 100%; padding: 0.6rem; margin-top: 0.5rem; font-size: 0.88rem;" onclick="window.appuEngine.completeOnboarding()">
-          🚀 Save & Continue
+        <button class="btn btn-primary" style="width: 100%; padding: 0.65rem; margin-top: 0.75rem; font-size: 0.86rem; border-radius: var(--radius-sm);" onclick="window.appuEngine.completeOnboarding()">
+          🚀 Start Personalised Learning
         </button>
       </div>
     `;
@@ -325,7 +328,7 @@ class APPUChatEngine {
     const div = document.createElement('div');
     div.className = 'chat-bubble-row appu';
     div.innerHTML = `
-      <div class="chat-bubble-content" style="width: 100%;">
+      <div class="chat-bubble-content" style="width: 100%; padding: 0.25rem;">
         ${cardHtml}
       </div>
     `;
@@ -335,53 +338,58 @@ class APPUChatEngine {
 
   async completeOnboarding() {
     const nameInput = document.getElementById('obName');
-    const roleInput = document.getElementById('obRole');
+    const gradeInput = document.getElementById('obGrade');
+    const favSubInput = document.getElementById('obFavSubject');
     const phoneInput = document.getElementById('obPhone');
 
     if (!nameInput || !phoneInput) return;
 
     const name = nameInput.value.trim();
-    const role = roleInput.value;
+    const grade = gradeInput ? gradeInput.value : 'Class 10';
+    const favSubject = favSubInput ? favSubInput.value : 'Science';
     const phone = phoneInput.value.trim();
 
     if (!name || !phone) {
-      alert("Please provide your name and WhatsApp number to continue!");
+      alert("Please enter your name and WhatsApp number to personalize your APPU experience!");
       return;
     }
 
     this.session.name = name;
-    this.session.role = role;
+    this.session.grade = grade;
+    this.session.favSubject = favSubject;
     this.session.phone = phone;
     this.session.isOnboarded = true;
 
     localStorage.setItem('appu_user_name', name);
-    localStorage.setItem('appu_user_role', role);
+    localStorage.setItem('appu_user_grade', grade);
+    localStorage.setItem('appu_user_fav_subject', favSubject);
     localStorage.setItem('appu_user_phone', phone);
-
-    this.updateRoleUI();
+    localStorage.setItem('appu_is_onboarded', 'true');
 
     // Trigger n8n Data Ingestion Workflow
     const leadPayload = {
       user_name: name,
-      user_role: role,
+      grade: grade,
+      fav_subject: favSubject,
       user_phone: phone,
-      grade: this.session.grade,
       source: 'APPU_Chat_Widget_LandingPage',
       timestamp: new Date().toISOString()
     };
 
-    const n8nResult = await window.n8nClient.submitLeadCapture(leadPayload);
+    window.n8nClient.submitLeadCapture(leadPayload);
 
-    // Remove onboarding card UI
+    // Replace onboarding card
     const cardEl = document.getElementById('onboardingCard');
-    if (cardEl) cardEl.parentElement.innerHTML = `✅ *Thank you ${name}! Your profile is saved and registered with Appu.*`;
+    if (cardEl && cardEl.parentElement) {
+      cardEl.parentElement.innerHTML = `✅ <strong>Profile Saved!</strong> Welcome ${name} (${grade} • ${favSubject}).`;
+    }
 
-    this.addAPPUMessage(`Wonderful, ${name}! 🎉 You're all set! Now let me answer your query with full personalized insights.`);
+    this.addAPPUMessage(`Namaste ${name}! 🚀 I'm super excited to be your 1-on-1 AI learning companion! I've customized your adaptive study path for **${grade} ${favSubject}**! What concept or question would you like to explore first? ✨`);
 
     if (this.pendingQuery) {
       const q = this.pendingQuery;
       this.pendingQuery = null;
-      setTimeout(() => this.processQuery(q), 500);
+      setTimeout(() => this.processQuery(q), 800);
     }
   }
 
