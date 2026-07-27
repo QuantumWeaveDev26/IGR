@@ -23,6 +23,14 @@
 </head>
 <body>
 
+  <!-- Performance Fixed SVG Grain Overlay -->
+  <div class="bg-grain-overlay"></div>
+
+  <!-- Ambient Studio Spotlights -->
+  <div class="ambient-spotlight spotlight-purple"></div>
+  <div class="ambient-spotlight spotlight-gold"></div>
+  <div class="ambient-spotlight spotlight-mint"></div>
+
   <!-- Real 3D WebGL Canvas Container -->
   <div id="three-canvas-container"></div>
 
@@ -31,16 +39,19 @@
     <div class="container nav-container">
       <a href="#" class="brand-logo">
         <span class="gradient-text">IGr</span>
-        <span class="appu-badge">APPU</span>
+        <span class="appu-badge">
+          <img src="images/appu_portrait.jpg" alt="APPU" style="width: 18px; height: 18px; border-radius: 50%; object-fit: cover; margin-right: 4px;">
+          APPU
+        </span>
       </a>
 
       <div class="nav-actions">
-        <a href="https://wa.me/?text=Hi%20APPU!%20I%20want%20to%20know%20more%20about%20IGr%20CBSE%20Learning" target="_blank" class="btn btn-whatsapp" style="padding: 0.5rem 1rem; font-size: 0.85rem; gap: 0.4rem;">
-          <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_t6t6g9.json" background="transparent" speed="1" style="width: 20px; height: 20px;" loop autoplay></lottie-player>
+        <a href="https://wa.me/?text=Hi%20APPU!%20I%20want%20to%20know%20more%20about%20IGr%20CBSE%20Learning" target="_blank" class="btn btn-whatsapp" style="padding: 0.45rem 0.9rem; font-size: 0.82rem; gap: 0.35rem;">
+          <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_t6t6g9.json" background="transparent" speed="1" style="width: 18px; height: 18px;" loop autoplay></lottie-player>
           <span>WhatsApp Us</span>
         </a>
-        <button class="btn btn-primary trigger-discovery-modal" style="padding: 0.55rem 1.1rem; font-size: 0.85rem; gap: 0.4rem;">
-          <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_r0a2j0v1.json" background="transparent" speed="1" style="width: 18px; height: 18px;" loop autoplay></lottie-player>
+        <button class="btn btn-primary trigger-discovery-modal" style="padding: 0.5rem 1rem; font-size: 0.82rem; gap: 0.35rem;">
+          <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_r0a2j0v1.json" background="transparent" speed="1" style="width: 16px; height: 16px;" loop autoplay></lottie-player>
           <span>Book Free Call</span>
         </button>
       </div>
@@ -84,20 +95,30 @@
 
         <div class="hero-cta-group">
           <button class="btn btn-primary trigger-discovery-modal" style="gap: 0.6rem;">
-            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_r0a2j0v1.json" background="transparent" speed="1" style="width: 22px; height: 22px;" loop autoplay></lottie-player>
+            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_r0a2j0v1.json" background="transparent" speed="1" style="width: 20px; height: 20px;" loop autoplay></lottie-player>
             <span>Book Your FREE Discovery Call</span>
           </button>
           <a href="https://wa.me/?text=Hi%20APPU!%20I%20want%20early%20access%20to%20IGr%20learning" target="_blank" class="btn btn-whatsapp" style="gap: 0.6rem;">
-            <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_t6t6g9.json" background="transparent" speed="1" style="width: 24px; height: 24px;" loop autoplay></lottie-player>
+            <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_t6t6g9.json" background="transparent" speed="1" style="width: 22px; height: 22px;" loop autoplay></lottie-player>
             <span>WhatsApp Us Instant</span>
           </a>
         </div>
       </div>
 
+      <!-- Studio Hero Visual Card -->
+      <div class="hero-visual-wrapper">
+        <div class="hero-studio-card">
+          <img src="images/studio_hero_appu.png" alt="IGr APPU Studio Learning Interface">
+          <div class="hero-live-badge">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-gold); display: inline-block;"></span>
+            <span>APPU Active Engine</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- SECTION 2: MEET IGR -->
+  <!-- SECTION 2: MEET IGR (BENTO GRID) -->
   <section class="section-padding" id="meet-igr">
     <div class="container">
       <div class="text-center">
@@ -107,8 +128,6 @@
           Traditional tuition treats every student like an identical assembly line product. IGr creates an adaptive 1-on-1 AI learning loop tailored to your exact speed and conceptual strengths.
         </p>
       </div>
-
-
 
       <div class="features-grid">
         <div class="feature-card">
@@ -174,118 +193,79 @@
         </button>
       </div>
 
-      <div class="stats-card-group">
-        <div class="stat-box" style="border-color: var(--border-primary);">
-          <div class="stat-number gradient-text">30-50%</div>
+      <div class="stats-container">
+        <div class="stat-card featured">
+          <div class="stat-value">30-50%</div>
           <div class="stat-label">Average CBSE Marks Boost</div>
         </div>
 
-        <div class="stat-box" style="border-color: var(--border-gold);">
-          <div class="stat-number gradient-gold">40 Hrs</div>
+        <div class="stat-card">
+          <div class="stat-value" style="color: var(--accent-gold);">40 Hrs</div>
           <div class="stat-label">To Build Strong Core Foundations</div>
         </div>
 
-        <div class="stat-box" style="border-color: rgba(16, 185, 129, 0.3);">
-          <div class="stat-number" style="color: var(--success);">60%</div>
+        <div class="stat-card">
+          <div class="stat-value" style="color: var(--accent-mint);">60%</div>
           <div class="stat-label">Reduction in Passive Screen Time</div>
         </div>
 
-        <div class="stat-box" style="border-color: rgba(14, 165, 233, 0.3);">
-          <div class="stat-number" style="color: var(--secondary);">100%</div>
+        <div class="stat-card">
+          <div class="stat-value" style="color: var(--accent-purple);">100%</div>
           <div class="stat-label">CBSE Board Syllabus Alignment</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 4: GAMIFIED & REFLECTION LEARNING -->
-  <section class="section-padding" id="gamified" style="background: var(--bg-card);">
+  <!-- SECTION 4: GAMIFIED QUESTS & INTERACTIVE PREVIEW -->
+  <section class="section-padding" id="gamified-quests">
     <div class="container">
       <div class="text-center">
-        <div class="section-tag">🎮 Gamified Reflection System</div>
-        <h2 class="section-title">Turn CBSE Preparation into an Inspiring Daily Quest</h2>
+        <div class="section-tag">🎮 Gamified Quest Engine</div>
+        <h2 class="section-title">Master Concepts Through Bite-Sized 15-Minute Quests</h2>
         <p class="section-subtitle">
-          No more rote memorization boredom. APPU turns science equations and math formulas into interactive quests where every small victory is celebrated.
+          No endless 2-hour lectures. APPU breaks down complex Class 10 CBSE syllabi into interactive, high-retention daily quests.
         </p>
       </div>
 
-      <div class="quest-tabs">
-        <button class="tab-btn active" data-tab="tabQuests">🎯 Daily Gamified Quests</button>
-        <button class="tab-btn" data-tab="tabReflection">🪞 Self-Reflection Check-Ins</button>
-        <button class="tab-btn" data-tab="tabBadges">🏆 Mastery Badges</button>
-        <button class="tab-btn" data-tab="tabAiSkills">🚀 Future AI Skills</button>
-      </div>
+      <div class="quest-tabs-container">
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="tab-math">📐 Mathematics (Class 10)</button>
+          <button class="tab-btn" data-tab="tab-science">🔬 Science & Physics</button>
+          <button class="tab-btn" data-tab="tab-social">🌍 Social Studies & AI</button>
+        </div>
 
-      <div class="tab-content active" id="tabQuests">
-        <div class="quest-grid">
-          <div>
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Targeted 15-Minute CBSE Quests</h3>
-            <p style="color: var(--text-sub); margin-bottom: 1.5rem; line-height: 1.7;">
-              Instead of sitting through 2-hour long monotonous lectures, students complete bite-sized quests. APPU breaks complex CBSE Class 10 Science (Light Reflection, Chemical Reactions) into interactive challenges.
-            </p>
-            <div style="background: rgba(139, 92, 246, 0.1); border-left: 4px solid var(--primary); padding: 1rem; border-radius: 4px;">
-              "APPU makes solving quadratic equations feel like leveling up in my favourite game!" — <em>Rohan, Grade 10 CBSE Student</em>
+        <div class="tab-content active" id="tab-math">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--surface-border); padding: 1.25rem; border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-gold); margin-bottom: 0.4rem;">Quest #1: Quadratic Formula Shortcut</h4>
+              <p style="font-size: 0.88rem; color: var(--text-sub);">Master discriminant analysis & nature of roots in 12 minutes.</p>
             </div>
-          </div>
-          <div style="text-align: center;">
-            <div style="background: var(--bg-surface-light); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border-primary);">
-              <span style="font-size: 3rem;">⚔️</span>
-              <h4 style="margin: 0.5rem 0;">Quest Status: ACTIVE</h4>
-              <p style="color: var(--accent-gold); font-weight: 700;">+250 XP • Concept Mastery Unlocked</p>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--surface-border); padding: 1.25rem; border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-gold); margin-bottom: 0.4rem;">Quest #2: Trigonometric Identities</h4>
+              <p style="font-size: 0.88rem; color: var(--text-sub);">Visual proof of sin²θ + cos²θ = 1 using interactive triangle bounds.</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="tab-content" id="tabReflection">
-        <div class="quest-grid">
-          <div>
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Daily Mindful Reflection with APPU</h3>
-            <p style="color: var(--text-sub); margin-bottom: 1.5rem; line-height: 1.7;">
-              At the end of each session, APPU conducts a 2-minute reflection check-in: <em>"What was your biggest win today? What felt tricky?"</em> This builds self-awareness, emotional resilience, and lifelong learning confidence.
-            </p>
-          </div>
-          <div style="text-align: center;">
-            <div style="background: var(--bg-surface-light); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border-gold);">
-              <span style="font-size: 3rem;">🪞</span>
-              <h4 style="margin: 0.5rem 0;">Daily Check-In</h4>
-              <p style="color: var(--text-muted);">"I mastered Ohm's Law today without getting confused!"</p>
+        <div class="tab-content" id="tab-science">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--surface-border); padding: 1.25rem; border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.4rem;">Quest #1: Light & Reflection Ray Diagrams</h4>
+              <p style="font-size: 0.88rem; color: var(--text-sub);">Drag virtual objects in convex mirrors to discover focal points live.</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--surface-border); padding: 1.25rem; border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.4rem;">Quest #2: Chemical Reactions & Balancing</h4>
+              <p style="font-size: 0.88rem; color: var(--text-sub);">Balance oxidation-reduction equations with instant visual feedback.</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="tab-content" id="tabBadges">
-        <div class="quest-grid">
-          <div>
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Certificates & Skill Badges</h3>
-            <p style="color: var(--text-sub); margin-bottom: 1.5rem; line-height: 1.7;">
-              Students earn verified mastery badges for every 10 hours of completed foundation training. These badges boost motivation and build a proud digital portfolio.
-            </p>
-          </div>
-          <div style="text-align: center;">
-            <div style="background: var(--bg-surface-light); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border-primary);">
-              <span style="font-size: 3rem;">🥇</span>
-              <h4 style="margin: 0.5rem 0;">CBSE Science Master</h4>
-              <p style="color: var(--success); font-weight: 700;">40-Hour Foundation Badge Earned</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-content" id="tabAiSkills">
-        <div class="quest-grid">
-          <div>
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Future AI Skills Included</h3>
-            <p style="color: var(--text-sub); margin-bottom: 1.5rem; line-height: 1.7;">
-              We don't just prepare students for board exams; we prepare them for the future. Students learn prompt engineering basics, AI-assisted research, and critical thinking tools alongside CBSE topics.
-            </p>
-          </div>
-          <div style="text-align: center;">
-            <div style="background: var(--bg-surface-light); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border-primary);">
-              <span style="font-size: 3rem;">🤖</span>
-              <h4 style="margin: 0.5rem 0;">AI Prompt Wizard</h4>
-              <p style="color: var(--secondary); font-weight: 700;">Grade 6–12 Special Module</p>
+        <div class="tab-content" id="tab-social">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--surface-border); padding: 1.25rem; border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-mint); margin-bottom: 0.4rem;">Quest #1: AI Prompt Engineering for CBSE</h4>
+              <p style="font-size: 0.88rem; color: var(--text-sub);">Learn how to structure complex questions to unlock step-by-step reasoning.</p>
             </div>
           </div>
         </div>
@@ -293,132 +273,106 @@
     </div>
   </section>
 
-  <!-- SECTION 5: PROMO VIDEO & DEMO PLAYER -->
-  <section class="section-padding" id="promo-video">
-    <div class="container">
-      <div class="text-center">
-        <div class="section-tag">🎬 See APPU In Action</div>
-        <h2 class="section-title">Watch How APPU Transforms CBSE Learning</h2>
-        <p class="section-subtitle">
-          Experience the warmth, interactive doubt resolution, and personalized guidance that makes APPU the most loved learning companion for students and parents.
-        </p>
-      </div>
+  <!-- SECTION 5: INTERACTIVE DEMO VIDEO PREVIEW -->
+  <section class="section-padding" id="demo-video">
+    <div class="container text-center">
+      <div class="section-tag">🎬 Experience APPU in Action</div>
+      <h2 class="section-title">See How APPU Transforms Learning in 2 Minutes</h2>
+      <p class="section-subtitle">
+        Watch how our 1-on-1 AI companion resolves doubts, creates visual analogies, and keeps students engaged.
+      </p>
 
-      <div class="video-embed-container">
-        <iframe
-          src="https://www.youtube.com/embed/EE5yKFzgFJI?rel=0&modestbranding=1"
-          title="IGr APPU Demo"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
+      <div class="video-preview-wrapper" id="videoPosterWrapper">
+        <img src="images/landing_page_screenshot.png" alt="IGr APPU Demo Video Preview" class="video-poster-img">
+        <div class="video-play-btn">▶</div>
       </div>
     </div>
   </section>
 
+  <!-- SECTION 6: CBSE GRADE MATRIX SELECTOR -->
+  <section class="section-padding" id="cbse-grades">
+    <div class="container text-center">
+      <div class="section-tag">🎓 CBSE Board Matrix</div>
+      <h2 class="section-title">Tailored for CBSE High School Students (Grades 6–12)</h2>
+      <p class="section-subtitle">Select your child's current grade to view subject coverage and diagnostic roadmap.</p>
 
-
-  <!-- SECTION 7: HOW APPU WORKS (4 STEPS) -->
-  <section class="section-padding" id="how-it-works">
-    <div class="container">
-      <div class="text-center">
-        <div class="section-tag">📈 40-Hour Transformation</div>
-        <h2 class="section-title">Visible Results Within 40 Hours</h2>
-        <p class="section-subtitle">
-          The first noticeable transformation isn't just better marks. Parents begin to notice confidence, understanding, and curiosity — the marks follow naturally.
-        </p>
+      <div class="grade-chips-wrapper">
+        <button class="grade-chip" data-grade="6">Grade 6</button>
+        <button class="grade-chip" data-grade="7">Grade 7</button>
+        <button class="grade-chip" data-grade="8">Grade 8</button>
+        <button class="grade-chip" data-grade="9">Grade 9</button>
+        <button class="grade-chip active" data-grade="10">Grade 10</button>
+        <button class="grade-chip" data-grade="11">Grade 11</button>
+        <button class="grade-chip" data-grade="12">Grade 12</button>
       </div>
 
-
-
-      <div class="steps-container">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3 class="step-title">5-Min Diagnostic</h3>
-          <p class="step-desc">APPU identifies exact hidden concept gaps without stressful tests.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3 class="step-title">Custom Quest Creation</h3>
-          <p class="step-desc">A tailored 40-hour learning path is created specifically for the student.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3 class="step-title">1-on-1 Learning with APPU</h3>
-          <p class="step-desc">Step-by-step doubt clearing with warm encouragement and instant practice.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-number">4</div>
-          <h3 class="step-title">Parent Insights</h3>
-          <p class="step-desc">Automated WhatsApp progress digests keep parents fully informed.</p>
-        </div>
+      <div style="background: var(--bg-card); border: 1px solid var(--surface-border); padding: 1.75rem; border-radius: var(--radius-xl); max-width: 720px; margin: 0 auto; text-align: left;">
+        <h4 style="font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 0.5rem;" class="subject-grade-tag">Grade 10 Full CBSE Coverage</h4>
+        <p style="color: var(--text-sub); font-size: 0.92rem;">
+          Includes Class 10 Physics (Light, Electricity), Chemistry (Carbon & Reaction Types), Mathematics (Trigonometry, Circles, Polynomials), and Biology, integrated with WhatsApp automated syllabus guides.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 8: TESTIMONIALS & DISCOVERY CALL BOOKING -->
-  <section class="section-padding" id="testimonials" style="background: linear-gradient(180deg, var(--bg-cream-dark) 0%, var(--bg-card) 100%);">
+  <!-- SECTION 7: AUTOMATED WHATSAPP SYSTEM & N8N FLOW -->
+  <section class="section-padding" id="n8n-whatsapp">
     <div class="container">
       <div class="text-center">
-        <div class="section-tag">💬 Real Stories & Reviews</div>
-        <h2 class="section-title">Loved by CBSE High Schoolers & Trusted by Parents</h2>
+        <div class="section-tag">📲 Instant WhatsApp Integration</div>
+        <h2 class="section-title">Zero Friction: Syllabus & Progress Sent to WhatsApp</h2>
         <p class="section-subtitle">
-          See how IGr and APPU are transforming learning journeys across India.
+          Whenever you or your child requests a syllabus file inside the APPU chat widget (or clicks a subject button), our n8n webhook workflow (`whatsapp-syllabus-sender`) automatically packages the PDF guide and sends it directly to your registered WhatsApp number in seconds!
         </p>
+      </div>
+
+      <div class="whatsapp-workflow-card">
+        <img src="images/studio_whatsapp_flow.png" alt="n8n WhatsApp Automation Workflow" style="border-radius: var(--radius-lg); width: 100%; border: 1px solid var(--surface-border);">
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: WALL OF PROOF / TESTIMONIALS -->
+  <section class="section-padding" id="testimonials">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-tag">💬 Real Parent & Student Stories</div>
+        <h2 class="section-title">What Parents Say About Their IGr Journey</h2>
+        <p class="section-subtitle">Hear from parents who replaced expensive tuitions with APPU's personalized AI learning loop.</p>
       </div>
 
       <div class="testimonial-grid">
         <div class="testimonial-card">
-          <p style="color: var(--text-sub); font-style: italic; line-height: 1.6;">
-            "My son went from 62% in Class 9 Physics to 91% in Class 10 Term 1! The best part is he doesn't sit with eyes glued to screens for hours anymore. The 15-minute APPU quests are super efficient."
-          </p>
-          <div class="author-info">
+          <div style="display: flex; gap: 0.85rem; align-items: center; margin-bottom: 1rem;">
             <div class="author-avatar">SP</div>
             <div>
-              <strong>Sunita Patel</strong><br>
-              <span style="font-size: 0.85rem; color: var(--text-muted);">Parent of Class 10 Student, Bengaluru</span>
+              <strong style="color: var(--text-main);">Sunita Patel</strong>
+              <div style="font-size: 0.8rem; color: var(--text-sub);">Parent of Class 10 Student, Bengaluru</div>
             </div>
           </div>
+          <p style="color: var(--text-sub); font-size: 0.93rem; font-style: italic;">
+            "The best part is he doesn't sit with eyes glued to YouTube videos anymore. The 15-minute APPU quests and Sunday WhatsApp digest give me complete peace of mind!"
+          </p>
         </div>
 
         <div class="testimonial-card">
-          <p style="color: var(--text-sub); font-style: italic; line-height: 1.6;">
-            "APPU feels like a real elder brother who never gets angry when I ask silly questions! I solved Trigonometry in just 3 days!"
-          </p>
-          <div class="author-info">
-            <div class="author-avatar" style="background: linear-gradient(135deg, var(--accent-gold), #ef4444);">AK</div>
+          <div style="display: flex; gap: 0.85rem; align-items: center; margin-bottom: 1rem;">
+            <div class="author-avatar" style="background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral));">AK</div>
             <div>
-              <strong>Aditya K.</strong><br>
-              <span style="font-size: 0.85rem; color: var(--text-muted);">Class 9 CBSE Student, Mysuru</span>
+              <strong style="color: var(--text-main);">Aditya K.</strong>
+              <div style="font-size: 0.8rem; color: var(--text-sub);">Class 9 CBSE Student, Mysuru</div>
             </div>
           </div>
+          <p style="color: var(--text-sub); font-size: 0.93rem; font-style: italic;">
+            "I asked APPU the same trigonometry doubt 5 times in different ways until I finally got it! Now I can solve Class 10 Math in 3 days!"
+          </p>
         </div>
-      </div>
-
-      <!-- Early Access Banner -->
-      <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(245, 158, 11, 0.15)); border: 1px solid var(--border-primary); border-radius: var(--radius-lg); padding: 3rem; text-align: center; max-width: 840px; margin: 0 auto;">
-        <h2 style="font-size: 2rem; margin-bottom: 0.75rem;">Apply for Early Access / Book Free Discovery Call</h2>
-        <p style="color: var(--text-sub); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-          Experience APPU live. Book a 1-on-1 discovery session with our learning specialists today.
-        </p>
-
-        <form class="early-access-form" style="display: flex; gap: 1rem; max-width: 500px; margin: 0 auto 1.5rem auto; flex-wrap: wrap;">
-          <input type="tel" placeholder="Enter WhatsApp Mobile Number" required style="flex: 1; padding: 0.9rem 1.2rem; border-radius: var(--radius-full); background: rgba(9, 13, 22, 0.8); border: 1px solid var(--border-light); color: #fff; outline: none; min-width: 240px;">
-          <button type="submit" class="btn btn-gold">🚀 Get Early Access</button>
-        </form>
-
-        <p style="font-size: 0.85rem; color: var(--text-muted);">
-          🔒 Zero spam. Instant WhatsApp confirmation via n8n automated integration.
-        </p>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 9: FAQ ACCORDION -->
-  <section class="section-padding" id="faq">
+  <!-- SECTION 9: FAQ ACCORDIONS -->
+  <section class="section-padding" id="faqs">
     <div class="container">
       <div class="text-center">
         <div class="section-tag">❓ Frequently Asked Questions</div>
@@ -426,79 +380,80 @@
         <p class="section-subtitle">Got questions? APPU has answers!</p>
       </div>
 
-      <div class="faq-accordion">
-        <div class="faq-item active">
-          <button class="faq-question">How does APPU reduce screen time while improving performance?</button>
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How does APPU reduce screen time while improving performance?</span>
+            <span class="faq-icon">+</span>
+          </div>
           <div class="faq-answer">
             Traditional online courses force students to watch endless 1-hour pre-recorded videos. APPU uses micro-targeted 15-minute diagnostic quests. By focusing 100% of study time on specific concept gaps, students finish their CBSE preparation in just 40 total hours—reducing unproductive screen time by up to 60%!
           </div>
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">Is IGr fully aligned with the latest CBSE Board syllabus?</button>
+          <div class="faq-question">
+            <span>Is IGr fully aligned with the latest CBSE Board syllabus?</span>
+            <span class="faq-icon">+</span>
+          </div>
           <div class="faq-answer">
-            Yes! All quest modules, diagnostic questions, and practice sets for Grades 6 through 12 are continuously updated according to the latest NCERT and CBSE Board guidelines.
+            Yes! IGr curriculum maps 100% to the official NCERT and CBSE Class 6–12 board guidelines, including rationalized syllabi and competency-based questions.
           </div>
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">How do parents stay informed about student progress?</button>
+          <div class="faq-question">
+            <span>How do parents track student progress?</span>
+            <span class="faq-icon">+</span>
+          </div>
           <div class="faq-answer">
-            Every week, our n8n automated integration delivers a detailed Parent Growth Digest directly to your WhatsApp. You get clear insights into completed hours, concept mastery percentages, and weak areas without needing to log in to complex portals.
+            Parents receive structured weekly WhatsApp progress digests detailing exact concept mastery, study hours completed, and recommended focus areas.
           </div>
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">How does WhatsApp syllabus delivery work?</button>
+          <div class="faq-question">
+            <span>Can I request syllabus files on WhatsApp?</span>
+            <span class="faq-icon">+</span>
+          </div>
           <div class="faq-answer">
-            Whenever you or your child requests a syllabus file inside the APPU chat widget (or clicks a subject button), our n8n webhook workflow (`whatsapp-syllabus-sender`) automatically packages the PDF guide and sends it directly to your registered WhatsApp number in seconds!
+            Absolutely! Click any subject syllabus button inside the APPU chat widget, and our n8n webhook integration will instantly dispatch the PDF guide straight to your WhatsApp number.
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- SITE FOOTER -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div>
-          <div class="brand-logo" style="margin-bottom: 1rem;">
+          <a href="#" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
             <span class="gradient-text">IGr</span>
             <span class="appu-badge">APPU</span>
-          </div>
-          <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 320px; line-height: 1.6;">
-            Hyper-personalized AI learning for CBSE high school students (Grades 6–12). Inspiring curiosity, building confidence, and empowering parents.
+          </a>
+          <p style="color: var(--text-sub); font-size: 0.9rem; max-width: 320px;">
+            Hyper-Personalized CBSE AI Learning Platform designed to maximize retention and build lifelong conceptual confidence.
           </p>
         </div>
 
-        <div class="footer-col">
-          <h4>Navigation</h4>
-          <ul>
-            <li><a href="#meet-igr">Why IGr</a></li>
-            <li><a href="#why-parents">Parent Insights</a></li>
-            <li><a href="#curriculum">CBSE Curriculum</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
+        <div>
+          <h4 style="font-size: 1rem; color: var(--text-main); margin-bottom: 1rem;">Quick Links</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem; color: var(--text-sub);">
+            <li><a href="#meet-igr">Personalization Engine</a></li>
+            <li><a href="#why-parents">Why CBSE Parents Trust IGr</a></li>
+            <li><a href="#gamified-quests">Gamified Quests</a></li>
+            <li><a href="#cbse-grades">CBSE Grade Matrix</a></li>
           </ul>
         </div>
 
-        <div class="footer-col">
-          <h4>Grade Matrix</h4>
-          <ul>
-            <li><a href="#curriculum">Class 6–8 Foundation</a></li>
-            <li><a href="#curriculum">Class 9 CBSE Prep</a></li>
-            <li><a href="#curriculum">Class 10 Board Quest</a></li>
-            <li><a href="#curriculum">Class 11 & 12 Advanced</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Support & Contact</h4>
-          <ul>
-            <li><a href="https://wa.me/" target="_blank">💬 Official WhatsApp</a></li>
-            <li><a href="#" class="trigger-discovery-modal">📞 Book Discovery Call</a></li>
+        <div>
+          <h4 style="font-size: 1rem; color: var(--text-main); margin-bottom: 1rem;">Legal & Support</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem; color: var(--text-sub);">
             <li><a href="#">Privacy Policy</a></li>
             <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Contact Us</a></li>
           </ul>
         </div>
       </div>
@@ -538,12 +493,8 @@
         </div>
 
         <div class="chat-actions-top">
-          <button class="voice-toggle-btn" id="voiceToggleBtn" title="Toggle APPU Voice Speech">
-            🔊
-          </button>
-          <button class="role-switcher-btn" id="roleToggleBtn" title="Switch between Student and Parent modes">
-            🔄 Persona
-          </button>
+          <button class="voice-toggle-btn" id="voiceToggleBtn" title="Toggle APPU Voice Speech">🔊</button>
+          <button class="role-switcher-btn" id="roleToggleBtn" title="Switch persona">🔄 Persona</button>
           <button class="close-chat-btn" id="closeChatBtn">&times;</button>
         </div>
       </div>
@@ -561,14 +512,10 @@
       <canvas id="chatConfettiCanvas" class="chat-confetti-canvas"></canvas>
 
       <!-- Chat Messages Body -->
-      <div class="chat-body" id="chatBody">
-        <!-- Messages rendered dynamically by appu-engine.js -->
-      </div>
+      <div class="chat-body" id="chatBody"></div>
 
       <!-- Suggested Chips -->
-      <div class="suggested-chips" id="suggestedChips">
-        <!-- Chips rendered dynamically by appu-engine.js -->
-      </div>
+      <div class="suggested-chips" id="suggestedChips"></div>
 
       <!-- Chat Input Footer -->
       <div class="chat-footer">
@@ -585,7 +532,7 @@
       <button class="close-modal-btn" id="closeDiscoveryModal">&times;</button>
       <div class="text-center" style="margin-bottom: 1.5rem;">
         <span class="section-tag">📞 Free 1-on-1 Consultation</span>
-        <h3 style="font-size: 1.5rem; margin-top: 0.5rem;">Book Your FREE Discovery Call</h3>
+        <h3 style="font-size: 1.5rem; margin-top: 0.5rem; color: white;">Book Your FREE Discovery Call</h3>
         <p style="color: var(--text-muted); font-size: 0.9rem;">
           Select a time for our CBSE Learning Specialist & APPU Advisor to connect with you.
         </p>
@@ -598,60 +545,53 @@
         </div>
 
         <div class="form-group">
-          <label>WhatsApp Phone Number</label>
+          <label>WhatsApp Mobile Number</label>
           <input type="tel" id="dcPhone" placeholder="e.g., 9876543210" required>
         </div>
 
         <div class="form-group">
-          <label>I am registering as a:</label>
+          <label>I am a:</label>
           <select id="dcRole">
             <option value="Parent">Parent</option>
-            <option value="Student">Student (Grade 6-12)</option>
+            <option value="Student">Student</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>CBSE Class / Grade</label>
+          <label>Student Current CBSE Grade</label>
           <select id="dcGrade">
-            <option value="Class 10">Class 10 Board Prep</option>
-            <option value="Class 9">Class 9 Foundation</option>
-            <option value="Class 8">Class 8 Foundation</option>
-            <option value="Class 6-7">Class 6–7 Foundation</option>
-            <option value="Class 11-12">Class 11–12 Advanced</option>
+            <option value="10">Class 10</option>
+            <option value="9">Class 9</option>
+            <option value="8">Class 8</option>
+            <option value="7">Class 7</option>
+            <option value="6">Class 6</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
           </select>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem; margin-top: 0.5rem;">
-          📅 Reserve Free Slot Now
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          📅 Reserve Free 1-on-1 Slot
         </button>
       </form>
     </div>
   </div>
 
-  <!-- VIDEO DEMO MODAL -->
+  <!-- INTERACTIVE DEMO VIDEO MODAL -->
   <div class="modal-overlay" id="videoModalOverlay">
     <div class="modal-box" style="max-width: 800px; padding: 1.5rem;">
       <button class="close-modal-btn" id="closeVideoModal">&times;</button>
-      <h3 style="margin-bottom: 1rem;">IGr APPU Demo Walkthrough</h3>
-      <div id="videoIframeContainer" style="aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden;">
-        <!-- Embedded Iframe -->
+      <div style="font-weight: 800; font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 1rem;">
+        📺 IGr APPU Interactive Learning Demo
       </div>
+      <div id="videoIframeContainer" style="width: 100%; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: #000;"></div>
     </div>
   </div>
 
-  <!-- Three.js 3D Engine from CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-  <!-- GSAP + Lenis from CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-
-  <!-- SCRIPTS -->
-  <script src="js/three-scene.js"></script>
-  <script src="js/animations.js"></script>
+  <!-- Scripts -->
   <script src="js/n8n-client.js"></script>
   <script src="js/appu-engine.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/animations.js"></script>
 </body>
 </html>
