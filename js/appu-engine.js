@@ -293,7 +293,7 @@ class APPUChatEngine {
         </div>
         
         <label>Your Name</label>
-        <input type="text" id="obName" placeholder="e.g., Ananya Sharma" value="${this.session.name}">
+        <input type="text" id="obName" placeholder="e.g., Ananya Sharma" value="${this.session.name && this.session.name !== 'Test User' ? this.session.name : ''}">
 
         <label>Select Your Class</label>
         <select id="obGrade">
@@ -317,7 +317,7 @@ class APPUChatEngine {
         </select>
 
         <label>WhatsApp Number (for syllabus & progress reports)</label>
-        <input type="tel" id="obPhone" placeholder="e.g., 9876543210" value="${this.session.phone}">
+        <input type="tel" id="obPhone" placeholder="e.g., 9876543210" value="${this.session.phone && !this.session.phone.startsWith('9876') ? this.session.phone : ''}">
 
         <button class="btn btn-primary" style="width: 100%; padding: 0.65rem; margin-top: 0.75rem; font-size: 0.86rem; border-radius: var(--radius-sm);" onclick="window.appuEngine.completeOnboarding()">
           🚀 Start Personalised Learning
