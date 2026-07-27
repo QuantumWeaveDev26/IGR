@@ -1,0 +1,11 @@
+model_list:
+  - model_name: openai/moonshotai.kimi-k2.5
+    litellm_params:
+      model: custom_openai/moonshotai.kimi-k2.5
+      api_base: https://bedrock-mantle.us-east-1.api.aws/v1
+      api_key: os.environ/OPENAI_API_KEY
+  - model_name: moonshotai.kimi-k2.5
+    litellm_params:
+      model: custom_openai/moonshotai.kimi-k2.5
+      api_base: https://bedrock-mantle.us-east-1.api.aws/v1
+      api_key: os.environ/OPENAI_API_KEY
