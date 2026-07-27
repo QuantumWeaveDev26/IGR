@@ -87,7 +87,7 @@ function initVideoModal() {
   videoPoster.addEventListener('click', () => {
     // Render demo video iframe or high quality player preview
     iframeContainer.innerHTML = `
-      <iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1" title="IGr APPU Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="aspect-ratio: 16/9; border-radius: 12px;"></iframe>
+      <iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/EE5yKFzgFJI?autoplay=1" title="IGr APPU Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="aspect-ratio: 16/9; border-radius: 12px; width: 100%; border: none;"></iframe>
     `;
     videoModal.classList.add('open');
   });
