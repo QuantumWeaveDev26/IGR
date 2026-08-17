@@ -1,0 +1,177 @@
+{
+  "name": "APPU AI Mentor - IGr Lead Capture & WhatsApp Syllabus Delivery",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-ingestion",
+        "options": {
+          "responseMode": "onReceived"
+        }
+      },
+      "id": "node-lead-webhook",
+      "name": "Webhook: Lead Capture",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "trigger_syllabus",
+        "options": {
+          "responseMode": "onReceived"
+        }
+      },
+      "id": "node-syllabus-webhook",
+      "name": "Webhook: Syllabus Delivery",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [250, 500]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "discovery-call-booking",
+        "options": {
+          "responseMode": "onReceived"
+        }
+      },
+      "id": "node-discovery-webhook",
+      "name": "Webhook: Discovery Booking",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [250, 700]
+    },
+    {
+      "parameters": {
+        "jsCode": "// APPU Workflow Intent Router & Data Formatter\nconst items = $input.all();\nreturn items.map(item => {\n  const data = item.json.body || item.json;\n  const isSyllabus = !!data.requested_syllabus;\n  const isBooking = !!data.preferred_slot || data.source === 'Discovery_Call';\n  \n  return {\n    json: {\n      event_type: isSyllabus ? 'WHATSAPP_SYLLABUS_DISPATCH' : (isBooking ? 'DISCOVERY_CALL_RESERVATION' : 'LEAD_ONBOARDING'),
+      user_name: data.user_name || 'Valued Learner',\n      user_phone: data.user_phone || '',\n      user_role: data.user_role || 'Student',\n      grade: data.grade || 'Class 10th',\n      requested_syllabus: data.requested_syllabus || 'CBSE Class 10 Science & Math Syllabus Guide',\n      timestamp: data.timestamp || new Date().toISOString(),\n      processed_at: new Date().toISOString(),\n      appu_status: 'QUEUED_FOR_WHATSAPP_DELIVERY'\n    }\n  };\n});"
+      },
+      "id": "node-payload-processor",
+      "name": "Code: Process APPU Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 500]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v18.0/YOUR_PHONE_NUMBER_ID/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_META_WHATSAPP_API_TOKEN"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.user_phone }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"cbse_syllabus_delivery_v1\",\n    \"language\": { \"code\": \"en_US\" },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          { \"type\": \"text\", \"text\": \"{{ $json.user_name }}\" },\n          { \"type\": \"text\", \"text\": \"{{ $json.requested_syllabus }}\" }\n        ]\n      }\n    ]\n  }\n}"
+      },
+      "id": "node-whatsapp-api",
+      "name": "HTTP: WhatsApp Cloud API Dispatch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [780, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Gupshup WhatsApp Dispatch Tool for n8n\n// Uses built-in n8n $helpers.httpRequest (fixes 'fetch is not defined' ReferenceError)\nconst recipientPhone = $input.first().json.body?.user_phone || $fromAI('recipientPhone', '919380815125');\nconst messageText = $fromAI('messageText', 'Syllabus PDF or study quest notification');\n\nconst response = await $helpers.httpRequest({\n  method: 'POST',\n  url: 'https://api.gupshup.io/sm/api/v1/msg',\n  headers: {\n    'Cache-Control': 'no-cache',\n    'Content-Type': 'application/x-www-form-urlencoded',\n    'apikey': 'YOUR_GUPSHUP_API_KEY'\n  },\n  body: new URLSearchParams({\n    channel: 'whatsapp',\n    source: '919972965677',\n    destination: recipientPhone,\n    'message': JSON.stringify({\n      type: 'text',\n      text: messageText\n    })\n  }).toString()\n});\n\nreturn [{ json: { success: true, response } }];"
+      },
+      "id": "node-gupshup-whatsapp-tool",
+      "name": "Gupshup WhatsApp Dispatch Tool",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [780, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    success: true,\n    status: 'DISPATCHED_TO_WHATSAPP_API',\n    workflowTag: 'whatsapp-syllabus-sender',\n    executionId: 'exec_wa_' + Date.now(),\n    message: 'APPU has sent the requested CBSE syllabus directly to WhatsApp!',\n    details: $input.first().json\n  }\n}];"
+      },
+      "id": "node-response-builder",
+      "name": "Code: Build Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1020, 500]
+    }
+  ],
+  "connections": {
+    "Webhook: Lead Capture": {
+      "main": [
+        [
+          {
+            "node": "Code: Process APPU Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook: Syllabus Delivery": {
+      "main": [
+        [
+          {
+            "node": "Code: Process APPU Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook: Discovery Booking": {
+      "main": [
+        [
+          {
+            "node": "Code: Process APPU Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Process APPU Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP: WhatsApp Cloud API Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP: WhatsApp Cloud API Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Code: Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "whatsapp-syllabus-sender"
+    },
+    {
+      "name": "trigger_syllabus"
+    },
+    {
+      "name": "lead-ingestion"
+    }
+  ]
+}
