@@ -467,8 +467,18 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
   );
 };
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function formatMessageMarkdown(text: string): string {
-  return text
+  const safeText = escapeHtml(text);
+  return safeText
     .replace(/^### (.*$)/gim, '<h4 style="font-weight:700; margin-top:6px; margin-bottom:4px;">$1</h4>')
     .replace(/^## (.*$)/gim, '<h3 style="font-weight:700; margin-top:8px; margin-bottom:4px;">$1</h3>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')

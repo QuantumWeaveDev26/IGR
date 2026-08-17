@@ -566,7 +566,7 @@
       {
         "parameters": {
           "method": "POST",
-          "url": "https://graph.facebook.com/v20.0/1288446054350994/messages?access_token=EAAdPdf4y960BSEs3nLuRqHx7LfUnXf5hVZAR4QtsbNqwysapZBxXeSvo8fe7wqHdGoyjAd0x1RktU3ArV9q88GMcvNj6rErl7KpWGg74mxazZANTDXqIjVIe1r5ZCHPQZBjLzks8A7fD3MIMGY0sxNtm54tVfAX4ZCdITo6dK0bZCuXovilZBL1WEclQSUHIswZBMMAZDZD",
+          "url": "https://graph.facebook.com/v20.0/1288446054350994/messages?access_token={{ $env.WHATSAPP_ACCESS_TOKEN || "YOUR_WHATSAPP_ACCESS_TOKEN" }}",
           "sendHeaders": true,
           "headerParameters": {
             "parameters": [
@@ -1120,7 +1120,7 @@
         {
           "parameters": {
             "method": "POST",
-            "url": "https://graph.facebook.com/v20.0/1288446054350994/messages?access_token=EAAdPdf4y960BSEs3nLuRqHx7LfUnXf5hVZAR4QtsbNqwysapZBxXeSvo8fe7wqHdGoyjAd0x1RktU3ArV9q88GMcvNj6rErl7KpWGg74mxazZANTDXqIjVIe1r5ZCHPQZBjLzks8A7fD3MIMGY0sxNtm54tVfAX4ZCdITo6dK0bZCuXovilZBL1WEclQSUHIswZBMMAZDZD",
+            "url": "https://graph.facebook.com/v20.0/1288446054350994/messages?access_token={{ $env.WHATSAPP_ACCESS_TOKEN || "YOUR_WHATSAPP_ACCESS_TOKEN" }}",
             "sendHeaders": true,
             "headerParameters": {
               "parameters": [
