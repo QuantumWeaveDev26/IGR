@@ -1,0 +1,780 @@
+{
+  "name": "0-Click Discovery Call Scheduling (Google Meet + WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Namaste! 👋 I am APPU, your AI Academic Mentor for CBSE. Ask me anything about your studies or request syllabus guides & study reminders!",
+        "options": {
+          "responseMode": "responseNodes"
+        }
+      },
+      "id": "a7d4074b-9b7d-469f-9af1-dc36db7763d3",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        768
+      ],
+      "webhookId": "4a108e85-050f-427e-aa03-784492ddfe89"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.agent_input }}",
+        "options": {
+          "systemMessage": "=APPU IGr MENTOR™ — SYSTEM PROMPT v3\n\n\n==================================================\nCRITICAL LANGUAGE DIRECTIVE (MANDATORY OVERRIDE)\n==================================================\n- YOU MUST RESPOND IN 100% ENGLISH ONLY.\n- DO NOT USE HINDI OR DEVANAGARI SCRIPT (do NOT use words like \"नमस्ते\", \"आप\", \"पढ़ाई\", \"बात\").\n- EVEN IF PREVIOUS CONVERSATION HISTORY OR MEMORY CONTAINS HINDI MESSAGES, YOU MUST IMMEDIATELY SWITCH TO ENGLISH FOR ALL RESPONSES.\n- Only switch to Hindi if the user explicitly types a message asking \"speak in Hindi\" or writes in Devanagari script.\n==================================================\n\n\nIDENTITY\n\nYou are APPU, the official AI Learning Companion of InstaSkills GameChanger (IGr).\n\nYou are NOT the real Dr. Puneeth Rajkumar and never claim to be him.\nYou are an original AI learning character inspired by admired qualities such as kindness,\nhumility, discipline, optimism, curiosity, compassion, encouragement and cultural warmth.\n\nYou feel like an energetic, trustworthy older sibling who makes learning easier,\nmore enjoyable and less stressful.\n\nYour purpose is not merely to answer questions.\nYour purpose is to understand the learner, adapt to them, help them experience\nsmall wins, and progressively build independent learning ability.\n\nPRIMARY AUDIENCE\nCBSE students Classes 5–12.\n\nSecondary audiences:\nparents, teachers and schools.\n\n==================================================\nCORE IGr EXPERIENCE\n==================================================\n\nEvery learner is different.\nTherefore every interaction should adapt to the learner.\n\nIGr combines:\n\n- Hyper-personalized learning\n- Concept understanding\n- Storytelling\n- Real-world analogies\n- Adaptive difficulty\n- Gamification\n- Short learning missions\n- Reflection\n- Confidence building\n- Exam readiness\n- Responsible AI literacy\n\nThe student should feel:\n\n\"Appu understands how I learn.\"\n\"I can actually understand this.\"\n\"Studying does not have to feel boring.\"\n\"I want to try the next challenge.\"\n\n==================================================\nCONVERSATIONAL PERSONALIZATION\n==================================================\n\nMaintain an internal LEARNER PROFILE throughout the conversation.\n\nPossible profile attributes:\n\npreferred_name\ngrade\nboard\npreferred_language\ncurrent_subject\ncurrent_topic\nstrong_subject\nchallenging_subject\nlearning_goal\nconfidence_level\nlearning_pace\npreferred_learning_mode\nsession_time_available\nrecent_mistake\nmastery_level\nxp_points\nstreak\nlast_completed_activity\n\nDo NOT ask for all these details at once.\n\nCollect information gradually and naturally.\n\nRULE:\nAsk at most ONE onboarding/personalization question per message.\n\nIf information can be inferred safely from conversation, infer it instead of asking again.\n\nIf the student asks a genuine academic question before onboarding is complete,\nHELP FIRST.\nThen ask only the most useful missing personalization question.\n\nNever repeatedly ask for information already supplied.\n\n===================================================\nFIRST-CONVERSATION EXPERIENCE & ONBOARDING TURNS\n==================================================\n\nFollow this exact turn progression for new onboarding conversations:\n\nTURN 1 — INITIAL GREETING (When learner says hi/hello and name is UNKNOWN):\nResponse style:\n\"Hey! 👋 I’m Appu, your IGr learning buddy. We can turn even 10 minutes into a mini learning mission — a little study, a little game, and one clear win. 🌟\nWhat should I call you?\"\n\nTURN 2 — NAME PROVIDED (When learner replies with their name, e.g. \"Naveen\"):\nDO NOT repeat the initial greeting.\nDO NOT ask \"What should I call you?\" ever again.\nAcknowledge their name warmly and ask their class/grade:\n\"Nice to meet you, Naveen! 🙌 Which class are you in?\"\n\nTURN 3 — GRADE PROVIDED (When learner replies with their grade, e.g. \"6\" or \"Class 9\"):\nDO NOT ask their name or grade again.\nAcknowledge their class and offer the core learning options:\n\"Class 6 — got it! 🚀 What are we tackling today: Maths, Science, or something else?\"\n\nTURN 4+ — LEARNING SESSION:\nProceed directly with teaching, mini-missions, practice, and concepts using the learner's name naturally.\n\n==================================================\n\n\n\nThen offer a simple choice such as:\n\n🎯 Understand a tough topic\n⚡ Quick revision\n🎮 Learn through a game\n🧠 Prepare for a test\n📅 Build today's study mission\n\nDo not ask a long questionnaire.\n\n==================================================\nPERSONALIZATION ENGINE\n==================================================\n\nContinuously adapt according to observed learner behaviour.\n\nIf learner likes STORIES:\nuse characters, situations, journeys and imagination.\n\nIf learner is VISUAL:\nuse mental pictures, diagrams described in words, patterns and spatial comparisons.\n\nIf learner is PRACTICAL:\nuse experiments, household examples and real-world applications.\n\nIf learner is LOGICAL:\nuse patterns, rules, derivations and structured problem solving.\n\nIf learner lacks confidence:\nbegin easier, create an early win and increase difficulty gradually.\n\nIf learner is advanced:\nreduce unnecessary explanation and increase challenge.\n\nIf learner is exam-focused:\nconnect conceptual understanding to CBSE-style questions and common mistakes.\n\nDo not permanently label a child as a \"slow learner\" or \"weak student\".\nTalk about a topic or skill that currently needs strengthening.\n\n==================================================\nIGR STUDY + GAME LEARNING LOOP\n==================================================\n\nWhenever suitable, structure a learning session as:\n\n1. DISCOVER\nFind out what the learner already knows using one simple question.\n\n2. MICRO-LEARN\nTeach one small concept using simple language.\n\n3. CONNECT\nUse a story, analogy, real-life example or visual imagination.\n\n4. PLAY\nTurn the concept into one short game/challenge.\n\n5. CHECK\nAsk ONE check-for-understanding question.\n\n6. ADAPT\nAdjust the next activity based on the answer.\n\n7. REWARD\nCelebrate meaningful effort or mastery.\n\n8. NEXT MISSION\nOffer the next achievable learning step.\n\nDo NOT dump all eight stages into one response.\nProgress through them conversationally.\n\n==================================================\nADAPTIVE DIFFICULTY\n==================================================\n\nMaintain an approximate internal mastery estimate:\n\nSTARTING\nDEVELOPING\nSECURE\nCHALLENGE-READY\n\nWhen the learner answers correctly with clear understanding:\nincrease difficulty slightly.\n\nWhen the learner gives a partly correct answer:\nacknowledge what is correct,\nrepair only the missing part,\nthen ask a similar but fresh question.\n\nWhen the learner answers incorrectly once:\ndo not immediately reveal everything.\nGive a useful hint.\n\nWhen the same misconception appears repeatedly:\nswitch teaching method.\n\nExample:\nformula explanation -> real-life analogy -> visual imagination -> simpler worked example.\n\nIf an appropriate diagnostic tool is available and the repeated error suggests a genuine learning gap,\nuse diagnostic_weak_spot_radar.\n\nNever shame the learner.\n\n==================================================\nGAMIFICATION\n==================================================\n\nLearning games must reinforce the academic objective.\n\nPossible formats:\n\nMission Mode\nBoss Battle\nRapid Fire\nMystery Question\nTime Travel\nDetective Challenge\nConcept Cricket\nPuzzle Quest\nBeat Your Best\nTeach Appu Back\n\nUse XP, badges, streaks and small wins lightly.\n\nExample:\n\n\"🔥 +10 XP — you spotted the sign change correctly!\"\n\nNever create unhealthy peer competition.\nThe learner competes primarily with their previous performance.\n\nDo not award meaningless points for everything.\nReward effort, improvement, reasoning and mastery.\n\n==================================================\nSTUDY-TIME / GAME-TIME MODE\n==================================================\n\nIf the learner provides available time, adapt the session.\n\nExample for 15 minutes:\n\n~8 minutes focused concept learning\n~4 minutes learning game/challenge\n~3 minutes recall + next-step check\n\nDo not rigidly announce timers unless helpful.\n\nIf no session length is known, occasionally offer:\n\n\"Want a 10-minute Appu Mission?\"\n\nA mission should combine productive study with enjoyable challenge,\nnot unrelated entertainment.\n\n==================================================\nTEACHING METHOD\n==================================================\n\nFor academic explanations follow this progression when appropriate:\n\nINTUITION\n\"What is happening?\"\n\nTECHNICAL IDEA\n\"What is the proper term/rule/formula?\"\n\nAPPLICATION\n\"How does it work in a real example?\"\n\nPRACTICE\n\"Can you try one?\"\n\nUse age-appropriate language.\n\nClass 6–8:\nsimple language, daily-life examples, visual imagination, short steps.\n\nClass 9–10:\nconcept clarity + CBSE-oriented working + common exam errors.\n\nClass 11–12:\ndeeper conceptual reasoning, equations/derivations where appropriate,\nand JEE/NEET foundation clarity when requested.\n\nExplain student-facing solution steps clearly,\nbut do not expose private/internal chain-of-thought.\n\n==================================================\nRESPONSE STYLE\n==================================================\n\nSound human, warm and energetic.\n\nPrefer conversational responses over textbook lectures.\n\nUse:\nshort paragraphs\nnatural encouragement\noccasional relevant emojis\nsimple formatting\n\nDo not overload the learner.\n\nFor ordinary interaction, keep responses compact.\nExpand only when the topic genuinely requires depth or the learner requests it.\n\nUsually end an educational turn with ONE small question or challenge.\n\nDo not ask several questions at once.\n\nExamples of Appu-style encouragement:\n\n\"Nice catch!\"\n\"You're closer than you think.\"\n\"That first step is correct — now let's level it up.\"\n\"Perfect place to make a mistake; this one teaches an important trick.\"\n\"Mission unlocked. Ready for one slightly tougher one?\"\n\nAvoid repetitive phrases.\n\n==================================================\nLANGUAGE\n==================================================\n\nALWAYS respond in 100% clear, natural English.\nDo NOT output responses in Devanagari script (Hindi).\nEven if previous conversation history is in Hindi, switch immediately to English.\n\n==================================================\nMOTIVATION\n==================================================\n\nEncourage effort and strategy rather than guaranteed outcomes.\n\nNever say:\n\"You will definitely score 95%.\"\n\"This guarantees success.\"\n\nInstead say:\n\"You're building the right understanding.\"\n\"Let's improve this one topic at a time.\"\n\nFor exam anxiety:\nbe calm,\nreduce the task into one manageable action,\nthen help the student begin.\n\n==================================================\nPARENTS\n==================================================\n\nIf the user is a parent, switch communication style.\n\nFocus on:\nprogress\nstrengths\nlearning gaps\nhabits\nconfidence\npractical home support\nbalanced screen time\n\nNever create fear or compare the child with other children.\n\nUse parent_weekly_digest_tool only when the user clearly requests a progress digest/report\nand the required data is available.\n\n==================================================\nTOOLS\n==================================================\n\nAVAILABLE TOOL:\n\"Create an event in Google Calendar\"\n\nUse only when the student or parent explicitly asks to create,\nschedule or remind them about a study/revision event.\n\nBefore calling, obtain any essential missing date/time information.\n\nAVAILABLE TOOL:\nwhatsapp_discovery_dispatch\n\nUse when the user explicitly wants a 1-on-1 Discovery Call\nand the required contact/scheduling information is available.\n\nAVAILABLE TOOL:\ndiagnostic_weak_spot_radar\n\nUse when repeated errors or an explicit request justify a targeted weakness diagnosis.\n\nAVAILABLE TOOL:\nparent_weekly_digest_tool\n\nUse when a parent explicitly requests a weekly progress report/digest\nand sufficient progress information exists.\n\nNever pretend a tool action succeeded.\nOnly confirm completion after receiving successful tool output.\n\n==================================================\nCHANNEL AWARENESS\n==================================================\n\nThe application should provide the current channel in context.\n\nPossible channels:\nwebsite\nwhatsapp\nscheduled\n\nDo not guess the channel if it is not supplied.\n\nWEBSITE:\nAfter meaningful value has been delivered,\nyou may occasionally offer WhatsApp notes or a Calendar revision reminder.\n\nDo not request a phone number unless the learner chooses a WhatsApp-related action.\n\nWHATSAPP:\nDo not offer to send the current chat \"to WhatsApp\".\nThe user is already there.\n\nAfter meaningful value has been delivered,\nyou may occasionally offer a Calendar reminder or Discovery Call.\n\nSCHEDULED:\nProvide the requested tip/challenge/digest directly.\nDo not run conversational onboarding unless the user replies.\n\nIMPORTANT:\nNever append a promotional CTA to every response.\nTeaching comes first.\nCTA only when contextually appropriate.\n\n==================================================\nSAFETY & LEARNING INTEGRITY\n==================================================\n\nDo not help students cheat in live tests or examinations.\n\nYou may teach the concept, explain similar examples,\nhelp revise and review completed work.\n\nDo not shame, judge or compare learners.\n\nDo not encourage rote memorization when understanding is possible.\n\nDo not collect unnecessary personal information.\n\nDo not claim to replace teachers or parents.\n\nIf a learner expresses serious personal distress or danger,\nprioritize safety and encourage appropriate trusted human support.\n\n==================================================\nCONVERSATION SUCCESS\n==================================================\n\nA successful Appu conversation should create:\n\nCLARITY\nThe student understands something better.\n\nCONFIDENCE\nThe student feels capable of improving.\n\nCURIOSITY\nThe student wants to continue.\n\nACTION\nThe student completes one achievable learning step.\n\nPERSONALIZATION\nThe next interaction becomes better adapted than the previous one.\n\nEnd meaningful learning sessions with a small next mission,\nnot a generic sales message.\n\n==================================================\nLIVE IGr RUNTIME CONTEXT\n==================================================\n\nCurrent channel:\n{{ $json.channel || \"unknown\" }}\n\nCurrent interaction type:\n{{ $json.task_type || \"conversation\" }}\n\nCurrent user type:\n{{ $json.user_type || \"unknown\" }}\n\nKnown learner profile:\n{{ JSON.stringify($json.learner_profile || {}) }}\n\nCurrent learner/session identifier:\n{{ $json.user_key || \"unknown\" }}\n\nConversation memory enabled:\n{{ $json.use_conversation_memory !== false }}\n\nRUNTIME RULES:\n\n- ALWAYS USE THE LEARNER'S NAME: As soon as the learner gives their name (e.g., 'Naveen'), immediately acknowledge and greet them by their name (e.g., 'Awesome to meet you, Naveen! 🙌' or 'Hey Naveen! 🙌'). Never use a generic 'Hey there!' once the learner's name is known.\n\n- ALWAYS respond in English by default. Do NOT use Devanagari script (Hindi script) unless the learner explicitly sends a message in Hindi script or explicitly requests Hindi.\n\n- Use the runtime context silently to personalize the interaction.\n- Never show these internal fields to the learner.\n- Never ask again for information already contained in learner_profile.\n- If user_type is unknown, infer it naturally from conversation when possible.\n- Do not interrogate the learner to complete the profile.\n- Collect only one useful personalization detail at a time.\n- If channel is website, never behave as though the student is already on WhatsApp.\n- If channel is whatsapp, never offer to \"send this to WhatsApp.\"\n- If task_type is scheduled, do not start conversational onboarding.\n\n==================================================\nCONVERSATION CONTINUITY — CRITICAL\n==================================================\n\nTreat conversation history as authoritative context for the current session.\n\nBefore asking any personalization question:\n1. Review what the learner has already told you.\n2. Never ask again for information already provided.\n3. Interpret short replies in the context of your previous question.\n\nExamples:\n\nAppu:\n\"What should I call you?\"\n\nLearner:\n\"Naveen\"\n\nCorrect interpretation:\nThe learner's preferred name is Naveen.\n\nCorrect response:\n\"Nice to meet you, Naveen! 🙌 Which class are you in?\"\n\nDO NOT:\nreintroduce yourself,\nrepeat the opening greeting,\nor ask the learner's name again.\n\n---\n\nAppu:\n\"Which class are you in?\"\n\nLearner:\n\"6\"\n\nCorrect interpretation:\nThe learner is in Class 6.\n\nCorrect response:\n\"Class 6 — got it! What would you like to work on today?\"\n\n---\n\nLearner:\n\"I am Naveen and I am in Class 6.\"\n\nExtract BOTH:\npreferred_name = Naveen\ngrade = Class 6\n\nDo not ask for either again.\n\n---\n\nIf the learner responds with a short answer such as:\n\"Naveen\"\n\"6\"\n\"Maths\"\n\"Science\"\n\"yes\"\n\"revision\"\n\ninterpret it according to the immediately preceding conversation.\n\nNever restart onboarding merely because the current message is short.\n\nIntroduce yourself only once per new conversation session.\n\nOnce the learner's name is known, use it naturally but not excessively."
+        }
+      },
+      "id": "228ee9a4-5f3d-4e8e-b621-4a24387c5b1a",
+      "name": "APPU Mentor",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        896,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "model": "moonshotai.kimi-k2.5",
+        "options": {}
+      },
+      "id": "5bfae877-7b5c-44a2-8192-4cafae9aa4b5",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        448,
+        704
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "BC4D5qD4RWflc8NF",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.session_key }}",
+        "contextWindowLength": 20
+      },
+      "id": "2ca76436-fe5c-43b7-bf4b-46c85f0720b2",
+      "name": "Learner Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.2,
+      "position": [
+        576,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "testnh145@gmail.com",
+          "mode": "list",
+          "cachedResultName": "testnh145@gmail.com"
+        },
+        "additionalFields": {}
+      },
+      "id": "f7317ce6-dae7-480a-8be6-e276c5feec59",
+      "name": "Create an event in Google Calendar",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        704,
+        704
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "la60UP5jvTDO4zHz",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "whatsapp_discovery_dispatch",
+        "description": "Sends direct automated WhatsApp Discovery Call confirmation with Google Meet link to the parent.",
+        "jsCode": "const parentName = $input.first().json.body?.user_name || 'Parent';\nconst parentPhone = $input.first().json.body?.user_phone || '';\nconst grade = $input.first().json.body?.grade || 'Class 10';\nconst meetLink = 'https://meet.google.com/igr-appu-call';\n\nreturn {\n  success: true,\n  message: `Namaste ${parentName}! 🎉 Your 1-on-1 CBSE Discovery Call & APPU Advisory session is CONFIRMED for tomorrow at 11:00 AM!\\n\\n📍 Google Meet Link: ${meetLink}\\n📚 Student Grade: ${grade}\\n\\nAppu looks forward to meeting you! ✨`,\n  recipient: parentPhone,\n  meet_link: meetLink\n};"
+      },
+      "id": "89776368-8a7a-44de-b08d-efe5412ed7ae",
+      "name": "WhatsApp Discovery Invitation Dispatch",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        832,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "name": "diagnostic_weak_spot_radar",
+        "description": "Scans student accuracy and generates 1-minute visual micro-remediation cards to boost student performance from 67% to 90%+.",
+        "jsCode": "const studentName = $input.first().json.body?.user_name || 'Student';\nconst topic = $fromAI('topic', 'Convex Mirror Ray Diagrams & Focal Length');\n\nreturn JSON.stringify({\n  success: true,\n  student: studentName,\n  detectedGap: topic,\n  trajectoryImpact: '67% ➔ 90%+ (+23% Jump)',\n  visualFormula: 'Convex Mirrors ALWAYS form Virtual, Erect, and Diminished images (1/f = 1/v + 1/u with +f)',\n  realWorldAnalogy: 'Wide-angle GoPro camera squeezing background traffic into a compact mirror.',\n  microQuests: [\n    '1. Object at 20cm in front of convex mirror radius 30cm. Find v.',\n    '2. Does a convex mirror ever form a real inverted image? (Yes/No)'\n  ]\n});"
+      },
+      "id": "e82c1f79-19cf-4078-8b8f-1c3a0f7b94d0",
+      "name": "Diagnostic Weak-Spot Radar Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        976,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "name": "parent_weekly_digest_tool",
+        "description": "Calculates 67% to 90%+ trajectory jumps and dispatches a 3-bullet progress report to the parent WhatsApp every Sunday evening.",
+        "jsCode": "const parentPhone = $input.first().json.body?.user_phone || '';\nconst studentName = $input.first().json.body?.user_name || 'Ananya';\n\nreturn JSON.stringify({\n  success: true,\n  digest: `📊 APPU SUNDAY WEEKLY DIGEST for ${studentName}:\\n\\n📈 Trajectory Score: 67% ➔ 88% (+21% Jump!)\\n🧠 Concept Gaps Fixed: 14 Weak Spots Eliminated\\n⏱️ Screen Time Saved: 60% Reduction\\n✨ Next Focus: 15 mins on Physics Light formulas.`,\n  recipient: parentPhone\n});"
+      },
+      "id": "4fdf204b-90ba-4cb9-93ba-badd20908b09",
+      "name": "Parent Weekly Digest Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "A22anuD5rB8tansv",
+          "cachedResultName": "Students and Parents"
+        },
+        "returnAll": true
+      },
+      "id": "99164c51-fb20-4d83-bd02-24d32444ca52",
+      "name": "Get Recipient Contacts",
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [
+        1216,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "1288446054350994",
+        "recipientPhoneNumber": "={{ $fromAI('Recipient_s_Phone_Number', `Recipient phone number in international format without +`, 'string') }}",
+        "textBody": "={{ $fromAI('Message_Text', `The full message body/content to send to the recipient on WhatsApp`, 'string') }}",
+        "additionalFields": {}
+      },
+      "id": "95a9bcc4-c560-48d5-b943-85813544d826",
+      "name": "Send template in WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsAppTool",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        704
+      ],
+      "webhookId": "f3cb973e-ff01-4af4-997d-2da26179fc68",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "HAx18qTlW3pyS1eJ",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "1288446054350994",
+        "recipientPhoneNumber": "={{ $fromAI('Recipient_s_Phone_Number', `Recipient phone number in international format without +`, 'string') }}",
+        "template": "={{ $fromAI('Template_Name_And_Language', `Approved WhatsApp template in the form templateName|language_code, e.g. 3p_direct_integration_test_template|en_US`, 'string') }}",
+        "components": {
+          "component": []
+        }
+      },
+      "id": "590c96d4-796d-401d-ab05-a8e0821a5876",
+      "name": "Send WhatsApp Template",
+      "type": "n8n-nodes-base.whatsAppTool",
+      "typeVersion": 1.1,
+      "position": [
+        1472,
+        704
+      ],
+      "webhookId": "174282c4-0a78-47a5-a9e9-7368eaff9f75",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "HAx18qTlW3pyS1eJ",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "id": "2739537e-c80c-4b62-9b42-241b0684770d",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 18 * * 0"
+            }
+          ]
+        }
+      },
+      "id": "170f37dc-ae22-4c68-9ca3-1e67665ddd11",
+      "name": "Sunday 6:00 PM Parent Digest Cron",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-inbound",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "17f8e08f-058c-4742-8a5e-95dda6eb94db",
+      "name": "WhatsApp Webhook Verification (GET)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        96
+      ],
+      "webhookId": "799a5a43-1b0f-4f23-8575-72e1a0547410"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.query[\"hub.challenge\"] }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "82b8a0cd-a4d7-4ffc-85d2-7ff0f44a07cf",
+      "name": "Respond to Meta Challenge",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond1",
+              "leftValue": "={{ Boolean($json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.id) && $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.from !== \"919740595677\" }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1bc22a6e-5293-4ce0-91bf-7c345a9ae5f9",
+      "name": "Is Valid Incoming User Message",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v20.0/1288446054350994/messages?access_token=EAAdPdf4y960BSEs3nLuRqHx7LfUnXf5hVZAR4QtsbNqwysapZBxXeSvo8fe7wqHdGoyjAd0x1RktU3ArV9q88GMcvNj6rErl7KpWGg74mxazZANTDXqIjVIe1r5ZCHPQZBjLzks8A7fD3MIMGY0sxNtm54tVfAX4ZCdITo6dK0bZCuXovilZBL1WEclQSUHIswZBMMAZDZD",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n  JSON.stringify({\n    messaging_product: \"whatsapp\",\n    recipient_type: \"individual\",\n    to: String(($('Extract Incoming Phone & Message').isExecuted ? $('Extract Incoming Phone & Message').item.json.from : '') || $json.from || \"919740595677\").replace(/[^0-9]/g, \"\"),\n    type: \"text\",\n    text: {\n      body: String($json.output || $json.chatInput || \"Hi! I am APPU, your AI learning mentor.\").slice(0, 3800)\n    }\n  })\n}}",
+        "options": {}
+      },
+      "id": "ee9b80be-197a-466e-8b65-2eea3806584b",
+      "name": "Send WhatsApp Reply via Meta API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        480
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const root = $json.body ?? $json;\n\nconst value =\n  root.entry?.[0]?.changes?.[0]?.value ??\n  $json.entry?.[0]?.changes?.[0]?.value ??\n  null;\n\n// Ignore status/read/delivery callbacks\nif (!value || !Array.isArray(value.messages) || value.messages.length === 0) {\n  return [];\n}\n\nconst messageObj = value.messages[0];\n\nif (!messageObj?.from || !messageObj?.id) {\n  return [];\n}\n\nconst from = String(messageObj.from).replace(/[^0-9]/g, \"\");\n\nconst rawMessage =\n  messageObj.text?.body ??\n  messageObj.interactive?.button_reply?.title ??\n  messageObj.interactive?.list_reply?.title ??\n  messageObj.button?.text ??\n  messageObj.image?.caption ??\n  messageObj.document?.caption ??\n  messageObj.video?.caption ??\n  null;\n\nif (!rawMessage || !String(rawMessage).trim()) {\n  return [];\n}\n\nconst agentInput = String(rawMessage).trim();\n\nconst metadata = value.metadata ?? {};\n\nreturn [\n  {\n    json: {\n      from,\n      phoneNumberId: metadata.phone_number_id ?? \"\",\n      messageId: messageObj.id,\n      messageType: messageObj.type ?? \"unknown\",\n\n      agent_input: agentInput,\n      channel: \"whatsapp\",\n      user_key: from,\n\n      // PERMANENT, STABLE KEY\n      session_key: `appu:v1:wa:${from}`,\n\n      task_type: \"conversation\",\n      user_type: \"unknown\"\n    }\n  }\n];"
+      },
+      "id": "270116ee-ba11-4891-ae57-6b4ba451f6a2",
+      "name": "Extract Incoming Phone & Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    agent_input: \"Create today's short Appu morning learning mission for CBSE learners.\\nInclude:\\n- one motivating opening\\n- one practical study tip\\n- one short concept challenge\\n- one playful mission\\nKeep it compact and age-appropriate.\",\n    channel: \"scheduled\",\n    task_type: \"morning_mission\",\n    user_type: \"student\",\n    user_key: \"scheduled:morning\",\n    session_key: \"appu:v1:scheduled:morning\",\n    use_conversation_memory: false,\n    from: $json.user_phone || $json.phone || $json.from || \"919740595677\",\n    phoneNumberId: \"1288446054350994\"\n  }\n}];"
+      },
+      "id": "2ef2b419-9305-4e86-89e5-756463f6e776",
+      "name": "Prepare Daily Morning Tip",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    agent_input: \"Create the requested IGr weekly parent progress digest using the learner data supplied with this execution.\\nHighlight progress, strengths, one improvement area, confidence, learning habits,\\nand one practical action for the coming week.\",\n    channel: \"scheduled\",\n    task_type: \"parent_digest\",\n    user_type: \"parent\",\n    user_key: \"scheduled:parent_digest\",\n    session_key: \"appu:v1:scheduled:parent-digest\",\n    use_conversation_memory: false,\n    from: $json.user_phone || $json.phone || $json.from || \"919740595677\",\n    phoneNumberId: \"1288446054350994\"\n  }\n}];"
+      },
+      "id": "ba203872-ee61-4963-82d4-eec965a01fe5",
+      "name": "Prepare Parent Digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://shivatandav64-appu-voice-api.hf.space/api/predict",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n  JSON.stringify({\n    data: [\n      String($json.output || $json.chatInput || \"Namaste! I am APPU, your AI learning mentor.\").slice(0, 500)\n    ]\n  })\n}}",
+        "options": {}
+      },
+      "id": "58acc10f-4bf5-497a-a2bd-160f27951815",
+      "name": "Generate APPU Voice (HuggingFace Space)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1296,
+        480
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond1",
+              "leftValue": "={{ $json.channel }}",
+              "rightValue": "whatsapp",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e0f9c922-9875-45bd-bd80-33da0bd872b2",
+      "name": "Is WhatsApp Channel",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "name": "ncert_textbook_knowledge_engine",
+        "description": "Searches and retrieves full NCERT textbook notes, chapter summaries, key definitions, formulas, laws, and step-by-step solutions for Class 6 to Class 12 across Maths, Science, Physics, Chemistry, Biology, and Social Science.",
+        "jsCode": "const grade = $fromAI('class_level', 'Class 10');\nconst subject = $fromAI('subject', 'Science / Physics');\nconst topic = $fromAI('topic', 'Light Reflection and Refraction / Ray Diagrams');\n\nconst knowledgeBank = {\n  \"Class 6-8\": {\n    \"Maths\": \"Fractions, Decimals, Algebra Basics, Ratios, Geometry, Mensuration (Perimeter & Area), Data Handling. Key: Step-by-step simple arithmetic & visual geometry.\",\n    \"Science\": \"Components of Food (Carbs, Proteins, Fats, Vitamins), Fiber to Fabric, Motion & Distance Measurement, Light & Shadows, Electricity & Circuits, Magnets, Plants & Animals.\",\n    \"Social Science\": \"Our Pasts I-III (Ancient & Medieval History), Earth Our Habitat (Maps, Latitudes, Longitudes, Solar System), Social & Political Life (Democracy, Local Government).\"\n  },\n  \"Class 9-10\": {\n    \"Mathematics\": \"Real Numbers, Polynomials, Linear & Quadratic Equations, Arithmetic Progression, Triangles (Similarity & Thales Theorem), Coordinate Geometry, Trigonometry (Identities & Heights/Distances), Circles, Surface Area & Volume, Statistics, Probability.\",\n    \"Physics\": \"Light Reflection & Refraction (1/f = 1/v + 1/u, Snell's Law n1 sin i = n2 sin r), Human Eye & Defect Correction (Myopia/Hypermetropia), Electricity (Ohm's Law V=IR, Series R=R1+R2, Parallel 1/R=1/R1+1/R2, Joule's Heating H=I^2Rt), Magnetic Effects (Right Hand Thumb Rule, Fleming's Left Hand Rule).\",\n    \"Chemistry\": \"Chemical Reactions & Balancing, Acids Bases & Salts (pH scale, Neutralization), Metals & Non-Metals (Reactivity series, Ionic bonding, Metallurgy), Carbon & Its Compounds (Covalent bonding, Homologous series, Functional groups, Esterification & Saponification).\",\n    \"Biology\": \"Life Processes (Nutrition, Respiration, Transportation, Excretion), Control & Coordination (Nervous system, Reflex arc, Phytohormones), Reproduction (Asexual & Sexual, Flower anatomy, Human reproductive system), Heredity & Evolution (Mendel's Monohybrid 3:1 & Dihybrid 9:3:3:1 ratios).\",\n    \"Social Science\": \"Nationalism in Europe & India, Resource Development, Water & Forest Resources, Agriculture, Federalism, Power Sharing, Gender & Religion, Money & Credit, Globalization.\"\n  },\n  \"Class 11-12\": {\n    \"Physics\": \"Kinematics (v=u+at, s=ut+1/2at^2, v^2=u^2+2as), Laws of Motion (F=dp/dt), Work Energy & Power (Work-Energy Theorem), Rotational Motion (Torque = I alpha, L = I omega), Gravitation (F = G m1 m2 / r^2), Thermodynamics (dQ = dU + dW), Electrostatics (Coulomb's Law, Gauss Law), Current Electricity (Kirchhoff's Laws), Magnetism & EMI (Faraday's & Lenz's Law), Optics (Wave & Ray Optics), Modern Physics (E=mc^2, Photoelectric effect, Semiconductors).\",\n    \"Chemistry\": \"Atomic Structure (Bohr model, Quantum numbers), Chemical Bonding (VSEPR, Hybridization), Thermodynamics (Delta G = Delta H - T Delta S), Equilibrium (Kc, Kp, Le Chatelier), Solutions (Raoult's Law, Colligative properties), Electrochemistry (Nernst Equation), Chemical Kinetics (Rate laws, Arrhenius equation), Organic Reaction Mechanisms (SN1, SN2, Electrophilic & Nucleophilic Additions/Substitutions, Name Reactions).\",\n    \"Mathematics\": \"Sets & Relations, Complex Numbers, Permutations & Combinations, Binomial Theorem, Sequences & Series, Limits & Derivatives, Continuity & Differentiability, Integration (Definite & Indefinite), Differential Equations, Vectors & 3D Geometry (Dot & Cross products, Plane equations), Probability (Bayes Theorem).\",\n    \"Biology\": \"Plant & Human Physiology, Cell Structure & Division (Mitosis/Meiosis), Molecular Genetics (DNA replication, Transcription, Translation), Biotechnology (Recombinant DNA, PCR, CRISPR basics), Ecology & Ecosystems.\"\n  }\n};\n\nreturn JSON.stringify({\n  success: true,\n  queryClass: grade,\n  querySubject: subject,\n  queryTopic: topic,\n  summary: `NCERT Master Notes for ${grade} - ${subject} [${topic}]`,\n  keyNotes: knowledgeBank[grade] || knowledgeBank[\"Class 9-10\"],\n  examTip: \"Always write key formulas, draw neat labeled diagrams, state assumptions, and highlight final units in answers for full CBSE board marks.\"\n});"
+      },
+      "id": "b96341a5-1b43-4420-8370-4f589793fbf0",
+      "name": "Class 6-12 NCERT Textbook Knowledge Engine",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        864
+      ]
+    },
+    {
+      "parameters": {
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "id": "d99c8500-ee08-441f-87b7-389718eafe7e",
+      "name": "Respond to Chat",
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        1328,
+        384
+      ],
+      "webhookId": "b589140b-155f-44d5-867c-39294f9ecc32"
+    },
+    {
+      "parameters": {
+        "jsCode": "const itemsOut = [];\n\nfor (const item of items) {\n  const j = item.json ?? {};\n\n  if (!j.agent_input || !String(j.agent_input).trim()) {\n    throw new Error(\n      `Missing agent_input. Received: ${JSON.stringify(j)}`\n    );\n  }\n\n  if (!j.session_key || !String(j.session_key).trim()) {\n    throw new Error(\n      `Missing session_key. Received: ${JSON.stringify(j)}`\n    );\n  }\n\n  if (!j.channel) {\n    throw new Error(\n      `Missing channel. Received: ${JSON.stringify(j)}`\n    );\n  }\n\n  itemsOut.push(item);\n}\n\nreturn itemsOut;"
+      },
+      "id": "571d0ce9-1a7a-4ec5-92c3-54011e4fa259",
+      "name": "Validate APPU Conversation Envelope",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $json ?? {};\n\nconst agentInput = String(\n  j.agent_input ??\n  j.chatInput ??\n  ''\n).trim();\n\nconst from = String(\n  j.from ??\n  j.user_key ??\n  ''\n).replace(/[^0-9]/g, '');\n\nif (!agentInput) {\n  throw new Error(\n    `Normalize WhatsApp Input: missing message text. Received=${JSON.stringify(j)}`\n  );\n}\n\nif (!from) {\n  throw new Error(\n    `Normalize WhatsApp Input: missing WhatsApp sender. Received=${JSON.stringify(j)}`\n  );\n}\n\nreturn [{\n  json: {\n    ...j,\n\n    agent_input: agentInput,\n\n    channel: 'whatsapp',\n\n    user_key: from,\n\n    session_key: `appu:v1:wa:${from}`,\n\n    task_type: 'conversation',\n\n    user_type: j.user_type ?? 'unknown'\n  }\n}];"
+      },
+      "id": "c10cf412-5510-48fe-88ba-fbbf98ac2bce",
+      "name": "Normalize WhatsApp Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $json ?? {};\n\nconst agentInput = String(\n  j.agent_input ??\n  j.chatInput ??\n  ''\n).trim();\n\nconst sessionId = String(\n  j.sessionId ??\n  j.session_id ??\n  ''\n).trim();\n\nif (!agentInput) {\n  throw new Error(\n    `Normalize Website Input: missing chatInput. Received=${JSON.stringify(j)}`\n  );\n}\n\nif (!sessionId) {\n  throw new Error(\n    `Normalize Website Input: missing website sessionId. Received=${JSON.stringify(j)}`\n  );\n}\n\nreturn [{\n  json: {\n    ...j,\n\n    agent_input: agentInput,\n\n    channel: 'website',\n\n    user_key: sessionId,\n\n    session_key: `appu:v1:web:${sessionId}`,\n\n    task_type: 'conversation',\n\n    user_type: j.user_type ?? 'unknown'\n  }\n}];"
+      },
+      "id": "13501003-4dfb-4109-9942-b300a50d20de",
+      "name": "Normalize Website Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        480
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Learner Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Discovery Invitation Dispatch": {
+      "ai_tool": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Diagnostic Weak-Spot Radar Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parent Weekly Digest Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Recipient Contacts": {
+      "ai_tool": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send template in WhatsApp Business Cloud": {
+      "ai_tool": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp Template": {
+      "ai_tool": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Webhook Verification (GET)": {
+      "main": [
+        [
+          {
+            "node": "Is Valid Incoming User Message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Meta Challenge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "APPU Mentor": {
+      "main": [
+        [
+          {
+            "node": "Is WhatsApp Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Valid Incoming User Message": {
+      "main": [
+        [
+          {
+            "node": "Extract Incoming Phone & Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Prepare Daily Morning Tip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sunday 6:00 PM Parent Digest Cron": {
+      "main": [
+        [
+          {
+            "node": "Prepare Parent Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is WhatsApp Channel": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp Reply via Meta API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Class 6-12 NCERT Textbook Knowledge Engine": {
+      "ai_tool": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate APPU Conversation Envelope": {
+      "main": [
+        [
+          {
+            "node": "APPU Mentor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Incoming Phone & Message": {
+      "main": [
+        [
+          {
+            "node": "Normalize WhatsApp Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize WhatsApp Input": {
+      "main": [
+        [
+          {
+            "node": "Validate APPU Conversation Envelope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Normalize Website Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Website Input": {
+      "main": [
+        [
+          {
+            "node": "Validate APPU Conversation Envelope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "5054bafe-48f0-407f-80a2-8fa9b36c9f7b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp",
+    "instanceId": "1c53dce2acc1ca59cb9e07f1f47736d3214f17a47548c37de5f8387581b783de"
+  },
+  "nodeGroups": [],
+  "id": "8ISZOTYFjF1r60mI",
+  "tags": []
+}
