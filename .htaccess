@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Directly serve files that exist in dist
+  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -d
+  RewriteRule ^(.*)$ dist/$1 [L]
+
+  # Direct fallback for assets and images
+  RewriteCond %{REQUEST_URI} ^/(assets|images)/(.*)$
+  RewriteRule ^(assets|images)/(.*)$ dist/$1/$2 [L]
+
+  # Fallback for all other requests to dist/index.html (SPA routing)
+  RewriteRule ^(.*)$ dist/index.html [L]
+</IfModule>
