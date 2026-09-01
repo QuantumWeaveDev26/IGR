@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { animate } from 'animejs';
+import { useTranslation } from '../context/LanguageContext';
 
 export const AppuSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -47,31 +49,31 @@ export const AppuSection: React.FC = () => {
     <section className="appu-section" ref={sectionRef}>
       <div className="wrap appu-layout">
         <div>
-          <div className="eyebrow">02 / Meet IGr</div>
-          <h2>A complete learning system that adapts to your child.</h2>
+          <div className="eyebrow">{t.appuSection.eyebrow}</div>
+          <h2>{t.appuSection.title}</h2>
           <p>
-            Academic excellence through AI-powered hyper-personalized learning. IGr makes room for how each learner understands—not just what they need to finish.
+            {t.appuSection.description}
           </p>
           <div className="statements">
             <div className="statement">
-              <span>Not another tuition.</span>
+              <span>{t.appuSection.statement1}</span>
               <span>×</span>
             </div>
             <div className="statement">
-              <span>Not another recorded course.</span>
+              <span>{t.appuSection.statement2}</span>
               <span>×</span>
             </div>
             <div className="statement">
-              <span>Not another learning app.</span>
+              <span>{t.appuSection.statement3}</span>
               <span>×</span>
             </div>
           </div>
         </div>
 
         <aside className="appu-card">
-          <div className="eyebrow">Your child’s guide</div>
-          <h3>Learn with APPU.</h3>
-          <p>A mentor designed to make learning engaging, memorable and less intimidating.</p>
+          <div className="eyebrow">{t.appuSection.guideCardEyebrow}</div>
+          <h3>{t.appuSection.guideCardTitle}</h3>
+          <p>{t.appuSection.guideCardDesc}</p>
           <div className="mini-appu">
             <div className="head">
               <i className="eye e1" />
@@ -86,4 +88,3 @@ export const AppuSection: React.FC = () => {
     </section>
   );
 };
-

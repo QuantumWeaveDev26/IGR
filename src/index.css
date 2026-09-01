@@ -1764,3 +1764,67 @@ section {
     right: -10px;
   }
 }
+
+/* =========================================================================
+   LANGUAGE SWITCHER & KANNADA LOCALIZATION ENHANCEMENTS
+   ========================================================================= */
+
+.lang-switcher-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(34, 35, 29, 0.06);
+  padding: 3px;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 35, 29, 0.14);
+}
+
+.lang-switcher-pill button {
+  border: none;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[lang="kn"] {
+  font-feature-settings: "kern" 1;
+}
+
+html[lang="kn"] h1,
+html[lang="kn"] h2,
+html[lang="kn"] h3 {
+  line-height: 1.25 !important;
+}
+
+html[lang="kn"] .hero h1 {
+  font-size: clamp(34px, 4.5vw, 64px);
+  line-height: 1.25 !important;
+}
+
+/* Speaking State Animation for Floating Mascot */
+.appu-floating-button.speaking {
+  animation: appu-speaking-glow 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes appu-speaking-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(38, 69, 56, 0.4), 0 10px 24px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(38, 69, 56, 0), 0 14px 32px rgba(38, 69, 56, 0.35);
+  }
+}
+
+/* Error Chat Bubble Styling */
+.chat-bubble-row .chat-bubble-content.bubble-error,
+.chat-bubble-row.bubble-error .chat-bubble-content {
+  background: #fff1f2 !important;
+  color: #9f1239 !important;
+  border: 1px solid #fecdd3 !important;
+}

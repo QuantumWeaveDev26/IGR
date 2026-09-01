@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { WhatsappLogo } from '@phosphor-icons/react';
+import { WhatsappLogo, Globe } from '@phosphor-icons/react';
+import { useTranslation } from '../context/LanguageContext';
 
 interface NavbarProps {
   onOpenEarlyAccess?: () => void;
@@ -8,6 +9,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = () => {
   const navRef = useRef<HTMLElement>(null);
+  const { language, setLanguage, t } = useTranslation();
   const waUrl = "https://wa.me/919740595677?text=Hi%20IGr%2C%20I%20would%20like%20to%20know%20more%20about%20APPU%20for%20CBSE%20learning.";
 
   useEffect(() => {
@@ -25,12 +27,41 @@ export const Navbar: React.FC<NavbarProps> = () => {
       <nav ref={navRef}>
         <div className="brand">
           IGr
-          <small>Instaskills Gamechanger</small>
+          <small>{t.nav.brandSubtitle}</small>
         </div>
-        <div className="nav-links">
-          <a href="#why">Why IGr</a>
-          <a href="#journey">How it works</a>
-          <a href="#results">Results</a>
+        <div className="nav-links flex items-center gap-3 sm:gap-4">
+          <a href="#why">{t.nav.whyIgr}</a>
+          <a href="#journey">{t.nav.howItWorks}</a>
+          <a href="#results">{t.nav.results}</a>
+
+          {/* Language Switcher Button (ENG | ಕನ್ನಡ) */}
+          <div className="lang-switcher-pill flex items-center bg-stone-100 dark:bg-stone-800/60 p-1 rounded-full border border-stone-200 dark:border-stone-700 text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => setLanguage('en')}
+              className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                language === 'en'
+                  ? 'bg-[#264538] text-white shadow-xs'
+                  : 'text-stone-600 hover:text-stone-900 dark:text-stone-400'
+              }`}
+              aria-label="Switch interface to English"
+            >
+              ENG
+            </button>
+            <button
+              type="button"
+              onClick={() => setLanguage('kn')}
+              className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                language === 'kn'
+                  ? 'bg-[#264538] text-white shadow-xs'
+                  : 'text-stone-600 hover:text-stone-900 dark:text-stone-400'
+              }`}
+              aria-label="Switch interface to Kannada"
+            >
+              ಕನ್ನಡ
+            </button>
+          </div>
+
           <a
             href={waUrl}
             target="_blank"
@@ -38,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             className="btn btn-dark !bg-emerald-700 !border-emerald-700 hover:!bg-emerald-800 text-white flex items-center gap-2"
           >
             <WhatsappLogo weight="fill" className="w-5 h-5 text-emerald-300" />
-            <span>Whatsapp Us</span>
+            <span>{t.nav.whatsappUs}</span>
             <span className="arrow">↗</span>
           </a>
         </div>

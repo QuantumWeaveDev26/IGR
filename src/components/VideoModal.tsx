@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { X, FilmStrip } from '@phosphor-icons/react';
+import { useTranslation } from '../context/LanguageContext';
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -7,6 +8,8 @@ interface VideoModalProps {
 }
 
 export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -34,13 +37,13 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose }) => {
         <div className="flex items-center justify-between p-3.5 sm:p-4 px-4 sm:px-6 border-b border-slate-800 bg-slate-950">
           <div className="flex items-center gap-2 text-white font-serif font-bold text-sm sm:text-base">
             <FilmStrip weight="fill" className="w-4 h-4 sm:w-5 sm:h-5 text-[#879D91]" />
-            <span className="truncate max-w-[240px] sm:max-w-none">See IGr in Action — Promo Video</span>
+            <span className="truncate max-w-[240px] sm:max-w-none">{t.modals.videoTitle}</span>
           </div>
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 hover:bg-rose-600 hover:text-white flex items-center justify-center transition-colors touch-active-bounce shrink-0"
-            aria-label="Close modal"
+            className="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 hover:bg-rose-600 hover:text-white flex items-center justify-center transition-colors touch-active-bounce shrink-0 cursor-pointer"
+            aria-label={t.modals.closeLabel}
           >
             <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
@@ -59,7 +62,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose }) => {
 
         {/* Modal Footer */}
         <div className="p-3 sm:p-4 px-4 sm:px-6 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-[11px] sm:text-xs text-slate-400 font-mono">
-          <span>Official IGr Demo</span>
+          <span>{t.modals.videoFooterDemo}</span>
           <span className="hidden sm:inline">YouTube ID: EE5yKFzgFJI</span>
         </div>
 
