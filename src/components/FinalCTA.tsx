@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { WhatsappLogo } from '@phosphor-icons/react';
-import { useTranslation } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +11,6 @@ interface FinalCTAProps {
 
 export const FinalCTA: React.FC<FinalCTAProps> = ({ onOpenEarlyAccess }) => {
   const mainRef = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
   const waUrl = "https://wa.me/919740595677?text=Hi%20IGr%2C%20I%20would%20like%20to%20know%20more%20about%20APPU%20for%20CBSE%20learning.";
 
   useEffect(() => {
@@ -32,15 +30,15 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onOpenEarlyAccess }) => {
         }
       }
     );
-  }, [t]);
+  }, []);
 
   return (
     <section id="contact" className="final">
       <div className="wrap">
         <div className="final-main" ref={mainRef}>
-          <div className="eyebrow">{t.finalCta.eyebrow}</div>
+          <div className="eyebrow">Start with a conversation</div>
           <h2>
-            {t.finalCta.titleLine1}<em>{t.finalCta.titleLine2Em}</em>
+            Give your child the learning journey they <em>deserve.</em>
           </h2>
           <div className="flex flex-wrap gap-4 justify-center items-center">
             <a
@@ -50,24 +48,24 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onOpenEarlyAccess }) => {
               className="btn !bg-emerald-600 !border-emerald-600 text-white hover:!bg-emerald-700 flex items-center gap-2"
             >
               <WhatsappLogo weight="fill" className="w-5 h-5 text-emerald-200" />
-              <span>{t.finalCta.whatsappBtn}</span>
+              <span>Whatsapp Us</span>
               <span className="arrow">↗</span>
             </a>
             <button
               type="button"
               className="btn btn-primary"
               onClick={onOpenEarlyAccess}
-              aria-label={t.finalCta.bookCallBtn}
+              aria-label="Book a free discovery call"
             >
-              {t.finalCta.bookCallBtn} <span className="arrow">↗</span>
+              Book your free discovery call <span className="arrow">↗</span>
             </button>
           </div>
         </div>
         <footer className="footer">
           <span>
-            {t.finalCta.footerSummary}
+            Learning that adapts to every learner. Powered by AI. Driven by hyper-personalization. Built for academic excellence.
           </span>
-          <span>{t.finalCta.footerCopyright}</span>
+          <span>© IGr / Instaskills Gamechanger</span>
         </footer>
       </div>
     </section>

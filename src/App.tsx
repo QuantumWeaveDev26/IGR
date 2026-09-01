@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { LanguageProvider } from './context/LanguageContext';
 import { ProgressRail } from './components/ProgressRail';
 import { CursorOrbit } from './components/CursorOrbit';
 import { Navbar } from './components/Navbar';
@@ -15,7 +14,7 @@ import { VideoModal } from './components/VideoModal';
 import { EarlyAccessModal } from './components/EarlyAccessModal';
 import { AppuChatWidget } from './components/AppuChatWidget';
 
-export const AppContent: React.FC = () => {
+export const App: React.FC = () => {
   const [isEarlyAccessOpen, setIsEarlyAccessOpen] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
@@ -98,14 +97,6 @@ export const AppContent: React.FC = () => {
         onClose={() => setIsEarlyAccessOpen(false)}
       />
     </>
-  );
-};
-
-export const App: React.FC = () => {
-  return (
-    <LanguageProvider>
-      <AppContent />
-    </LanguageProvider>
   );
 };
 

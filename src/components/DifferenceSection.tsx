@@ -1,13 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTranslation } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const DifferenceSection: React.FC = () => {
   const compareRef = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (!compareRef.current) return;
@@ -28,46 +26,46 @@ export const DifferenceSection: React.FC = () => {
         }
       }
     );
-  }, [t]);
+  }, []);
 
   return (
     <section className="difference">
       <div className="wrap">
         <div className="section-head">
-          <div className="eyebrow">{t.differenceSection.eyebrow}</div>
+          <div className="eyebrow">05 / The difference</div>
           <div>
-            <h2>{t.differenceSection.title}</h2>
-            <p>{t.differenceSection.description}</p>
+            <h2>Learning first. Results follow.</h2>
+            <p>IGr replaces a single, fixed path with a learning journey that is personal, active and designed to grow independence.</p>
           </div>
         </div>
         <div className="compare" ref={compareRef}>
           <div className="compare-row compare-head">
-            <div>{t.differenceSection.colTraditional}</div>
-            <div>{t.differenceSection.colIgr}</div>
+            <div>Traditional learning</div>
+            <div>IGr</div>
           </div>
           <div className="compare-row">
-            <div>{t.differenceSection.row1Trad}</div>
-            <div>{t.differenceSection.row1Igr}</div>
+            <div>One syllabus for everyone</div>
+            <div>Personalized learning journey</div>
           </div>
           <div className="compare-row">
-            <div>{t.differenceSection.row2Trad}</div>
-            <div>{t.differenceSection.row2Igr}</div>
+            <div>Memorisation</div>
+            <div>Concept mastery</div>
           </div>
           <div className="compare-row">
-            <div>{t.differenceSection.row3Trad}</div>
-            <div>{t.differenceSection.row3Igr}</div>
+            <div>Passive learning</div>
+            <div>Gamified engagement</div>
           </div>
           <div className="compare-row">
-            <div>{t.differenceSection.row4Trad}</div>
-            <div>{t.differenceSection.row4Igr}</div>
+            <div>One teaching style</div>
+            <div>Adaptive learning</div>
           </div>
           <div className="compare-row">
-            <div>{t.differenceSection.row5Trad}</div>
-            <div>{t.differenceSection.row5Igr}</div>
+            <div>Long screen time</div>
+            <div>Learn smarter, not longer</div>
           </div>
           <div className="compare-row">
-            <div>{t.differenceSection.row6Trad}</div>
-            <div>{t.differenceSection.row6Igr}</div>
+            <div>Limited AI exposure</div>
+            <div>AI-ready by default</div>
           </div>
         </div>
       </div>

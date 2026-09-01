@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTranslation } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,12 +8,14 @@ export const RouteSection: React.FC = () => {
   const [activeStation, setActiveStation] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const atlasRef = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
 
-  const stations = t.routeSection.stations.map((st, i) => ({
-    ...st,
-    class: `s${i + 1}`
-  }));
+  const stations = [
+    { id: '01', title: 'Understand', desc: 'Concepts, not answers to memorise.', class: 's1' },
+    { id: '02', title: 'Explore', desc: 'Stories, visuals and examples.', class: 's2' },
+    { id: '03', title: 'Practise', desc: 'Small challenges that build belief.', class: 's3' },
+    { id: '04', title: 'Reflect', desc: 'Learning that stays with them.', class: 's4' },
+    { id: '05', title: 'Grow', desc: 'Progress everyone can see.', class: 's5' },
+  ];
 
   useEffect(() => {
     if (!atlasRef.current) return;
@@ -36,21 +37,21 @@ export const RouteSection: React.FC = () => {
         }
       }
     );
-  }, [t]);
+  }, []);
 
   return (
     <section id="journey" className="route-section" ref={sectionRef}>
       <div className="wrap">
         <div className="route-title">
           <div>
-            <div className="eyebrow">{t.routeSection.eyebrow}</div>
+            <div className="eyebrow">03 / A route that changes with them</div>
             <h2>
-              {t.routeSection.titleLine1}
+              One learner.
               <br />
-              {t.routeSection.titleLine2}
+              Many ways forward.
             </h2>
           </div>
-          <p>{t.routeSection.description}</p>
+          <p>Every learning journey draws from the same strong foundation, then adapts to the learner in front of it.</p>
         </div>
 
         <div className="route-atlas" ref={atlasRef}>

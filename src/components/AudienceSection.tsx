@@ -1,13 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTranslation } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const AudienceSection: React.FC = () => {
   const gridRef = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (!gridRef.current) return;
@@ -28,33 +26,33 @@ export const AudienceSection: React.FC = () => {
         }
       }
     );
-  }, [t]);
+  }, []);
 
   return (
     <section className="audience">
       <div className="wrap">
         <div className="section-head">
-          <div className="eyebrow">{t.audienceSection.eyebrow}</div>
+          <div className="eyebrow">06 / Built for academic excellence</div>
           <div>
-            <h2>{t.audienceSection.title}</h2>
+            <h2>For every family looking beyond tuition.</h2>
           </div>
         </div>
         <div className="audience-grid" ref={gridRef}>
           <div className="audience-card">
-            <b>{t.audienceSection.card1Title}</b>
-            <p>{t.audienceSection.card1Desc}</p>
+            <b>Parents</b>
+            <p>Who want learning to feel more personal, not more pressurised.</p>
           </div>
           <div className="audience-card">
-            <b>{t.audienceSection.card2Title}</b>
-            <p>{t.audienceSection.card2Desc}</p>
+            <b>Struggling learners</b>
+            <p>Who need concepts rebuilt with patience and clarity.</p>
           </div>
           <div className="audience-card">
-            <b>{t.audienceSection.card3Title}</b>
-            <p>{t.audienceSection.card3Desc}</p>
+            <b>High performers</b>
+            <p>Who are ready to go further than the standard route.</p>
           </div>
           <div className="audience-card">
-            <b>{t.audienceSection.card4Title}</b>
-            <p>{t.audienceSection.card4Desc}</p>
+            <b>Schools</b>
+            <p>Preparing learners for a changing, AI-driven future.</p>
           </div>
         </div>
       </div>
