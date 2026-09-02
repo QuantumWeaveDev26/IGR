@@ -1,137 +1,164 @@
 /**
- * Secure APPU Backend Client for IGR
+ * Dedicated APPU AI Mentor Client for IGR Academy
  *
- * Communicates with the production APPU gateway at https://api.appuai.online.
- * Follows the same contract as the appuai.online frontend's AppuBackendClient.
+ * Communicates with the IGR server gateway endpoint (POST /api/appu/message)
+ * configured via VITE_IGR_API_BASE_URL (defaults to https://api.igr.academy).
  *
- * SECURITY INVARIANTS:
- * - Browser sends ONLY: message, language, guestToken
- * - Browser NEVER sends: n8n webhook URLs, HMAC secrets, ElevenLabs keys, Supabase keys
- * - Guest token is stored in localStorage as 'appu_guest_token'
- * - Audio URLs are validated against the trusted API origin before playback
- * - Authorization headers are NEVER attached to non-APPU origins
+ * ARCHITECTURAL INVARIANTS:
+ * - NO APPU product guest-token / 3-turn limit / login gating.
+ * - Persistent anonymous session ID via localStorage['igr_session_id'].
+ * - Receives direct inline audioSource (data:audio/mpeg;base64,...) for both English and ElevenLabs v3 Kannada.
+ * - Zero browser / system SpeechSynthesis fallback.
+ * - Zero direct n8n or ElevenLabs credentials in the frontend.
  */
 
-const APPU_API_BASE = 'https://api.appuai.online';
-const GUEST_TOKEN_KEY = 'appu_guest_token';
+const IGR_API_BASE = (
+  (typeof import.meta !== 'undefined' && (import.meta as any).env && (import.meta as any).env.VITE_IGR_API_BASE_URL) ||
+  'https://api.igr.academy'
+).replace(/\/+$/, '');
+
+const SESSION_KEY = 'igr_session_id';
 
 export interface AppuMessageResponse {
   output: string | null;
   audioSource: string | null;
   audioDurationMs: number | null;
-  guestToken: string | null;
-  guestRemaining: number | null;
 }
 
-function getStoredGuestToken(): string | null {
-  try {
-    const tok = localStorage.getItem(GUEST_TOKEN_KEY);
-    if (tok && typeof tok === 'string' && tok.trim()) return tok.trim();
-  } catch {}
-  return null;
-}
-
-function setStoredGuestToken(token: string): void {
-  if (!token || typeof token !== 'string' || !token.trim()) return;
-  try {
-    localStorage.setItem(GUEST_TOKEN_KEY, token.trim());
-  } catch {}
+export interface PlayAudioOptions {
+  audioSource?: string | null;
+  onStart?: () => void;
+  onEnded?: () => void;
+  onError?: (err: unknown) => void;
 }
 
 /**
- * Resolve an audio URL against the trusted APPU API base.
- * Rejects untrusted external origins to prevent credential leakage.
+ * Retrieve or generate a stable anonymous conversation session identifier.
  */
-export function resolveAudioUrl(rawUrl: string | null | undefined): string | null {
-  if (!rawUrl || typeof rawUrl !== 'string') return null;
-  const trimmed = rawUrl.trim();
-  if (!trimmed) return null;
-
-  // Data URIs (base64 audio) are always safe — no network request
-  if (trimmed.startsWith('data:audio/')) return trimmed;
-
-  // Blob URLs are local
-  if (trimmed.startsWith('blob:')) return trimmed;
-
-  // Relative URL: resolve against API base
-  if (trimmed.startsWith('/')) {
-    return `${APPU_API_BASE}${trimmed}`;
-  }
-
-  // Absolute URL: verify origin matches trusted APPU backend
+export function getOrCreateSessionId(): string {
   try {
-    const parsed = new URL(trimmed);
-    const trustedOrigin = new URL(APPU_API_BASE).origin;
-    if (parsed.origin === trustedOrigin) {
-      return parsed.toString();
+    let id = localStorage.getItem(SESSION_KEY);
+    if (!id || typeof id !== 'string' || !/^[a-zA-Z0-9_-]{8,128}$/.test(id.trim())) {
+      id = (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function')
+        ? crypto.randomUUID()
+        : 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem(SESSION_KEY, id);
     }
-    console.warn('[APPU Client] Blocked audio URL from untrusted origin:', parsed.origin);
-    return null;
+    return id.trim();
   } catch {
-    return null;
+    return 'sess_fallback_default';
+  }
+}
+
+let currentAudioElement: HTMLAudioElement | null = null;
+
+export function stopAllAudio(): void {
+  if (currentAudioElement) {
+    try {
+      currentAudioElement.pause();
+      currentAudioElement.currentTime = 0;
+      currentAudioElement.src = '';
+    } catch {}
+    currentAudioElement = null;
   }
 }
 
 /**
- * Send a message to the APPU backend.
- * Uses the guest session flow (no authentication required for IGR landing page).
+ * Send a learning query to the IGR server gateway.
+ * Zero APPU guest limits or login gates.
  */
 export async function sendMessage(
   message: string,
   language: string = 'en'
 ): Promise<AppuMessageResponse> {
-  const guestToken = getStoredGuestToken();
+  const sessionId = getOrCreateSessionId();
 
-  const body: Record<string, unknown> = {
+  const body = {
     message,
     language,
+    includeAudio: true,
+    sessionId
   };
 
-  if (guestToken) {
-    body.guestToken = guestToken;
-  }
-
   try {
-    const response = await fetch(`${APPU_API_BASE}/api/appu/message`, {
+    const response = await fetch(`${IGR_API_BASE}/api/appu/message`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     });
+
+    if (!response.ok) {
+      console.warn('[IGR APPU Client] Gateway returned error status:', response.status);
+      return {
+        output: null,
+        audioSource: null,
+        audioDurationMs: null
+      };
+    }
 
     const json = await response.json();
 
-    // Persist guest token from response
-    const newToken =
-      json?.guest?.token ||
-      json?.guestSession?.token ||
-      json?.guestToken ||
-      null;
-    if (newToken) {
-      setStoredGuestToken(newToken);
-    }
-
     return {
-      output: json?.output || json?.text || json?.message || null,
-      audioSource: resolveAudioUrl(json?.audioSource || json?.audioStreamUrl || null),
-      audioDurationMs: json?.audioDurationMs ?? null,
-      guestToken: newToken,
-      guestRemaining: json?.guest?.remaining ?? json?.guestSession?.remaining ?? null,
+      output: json?.text || json?.output || json?.message || null,
+      audioSource: json?.audioSource && typeof json.audioSource === 'string' && json.audioSource.startsWith('data:audio/')
+        ? json.audioSource
+        : null,
+      audioDurationMs: json?.audioDurationMs ?? null
     };
   } catch (err) {
-    console.warn('[APPU Client] Message request failed:', err);
+    console.warn('[IGR APPU Client] Gateway connection error:', err);
     return {
       output: null,
       audioSource: null,
-      audioDurationMs: null,
-      guestToken: null,
-      guestRemaining: null,
+      audioDurationMs: null
     };
+  }
+}
+
+/**
+ * Play server-provided inline audio (English or ElevenLabs v3 Kannada).
+ * Fails gracefully without falling back to browser/system TTS.
+ */
+export async function playAudio(options: PlayAudioOptions): Promise<boolean> {
+  const { audioSource, onStart, onEnded, onError } = options;
+
+  stopAllAudio();
+
+  if (!audioSource || typeof audioSource !== 'string' || !audioSource.trim()) {
+    return false;
+  }
+
+  try {
+    const audio = new Audio(audioSource.trim());
+    currentAudioElement = audio;
+    audio.volume = 1.0;
+    audio.muted = false;
+
+    audio.addEventListener('play', () => onStart?.(), { once: true });
+    audio.addEventListener('ended', () => {
+      stopAllAudio();
+      onEnded?.();
+    }, { once: true });
+    audio.addEventListener('error', (e) => {
+      console.warn('[IGR APPU Audio] Audio element playback error:', e);
+      stopAllAudio();
+      onError?.(e);
+    }, { once: true });
+
+    await audio.play();
+    return true;
+  } catch (err) {
+    console.warn('[IGR APPU Audio] Direct audio play error (graceful):', err);
+    onError?.(err);
+    return false;
   }
 }
 
 export const appuClient = {
   sendMessage,
-  resolveAudioUrl,
+  playAudio,
+  stopAllAudio,
+  getOrCreateSessionId
 };
 
 export default appuClient;
