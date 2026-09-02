@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const ResultsSection: React.FC = () => {
   const listRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -32,32 +34,32 @@ export const ResultsSection: React.FC = () => {
     <section id="results" className="results">
       <div className="wrap results-grid">
         <div>
-          <div className="eyebrow">04 / Within the first 40 hours</div>
-          <h2>First, they notice the difference.</h2>
+          <div className="eyebrow">{t('results.eyebrow')}</div>
+          <h2>{t('results.heading')}</h2>
           <p className="results-intro">
-            The first transformation is not just better marks. It is how a child begins to show up for learning. The marks follow the understanding.
+            {t('results.intro')}
           </p>
         </div>
         <div className="results-list" ref={listRef}>
           <div>
             <span>01</span>
-            <p>“They explain the idea in their own words now.”</p>
-            <b>Understanding</b>
+            <p>{t('results.r1.quote')}</p>
+            <b>{t('results.r1.label')}</b>
           </div>
           <div>
             <span>02</span>
-            <p>“Homework doesn’t start with resistance anymore.”</p>
-            <b>Learning habits</b>
+            <p>{t('results.r2.quote')}</p>
+            <b>{t('results.r2.label')}</b>
           </div>
           <div>
             <span>03</span>
-            <p>“They put their hand up in class.”</p>
-            <b>Participation</b>
+            <p>{t('results.r3.quote')}</p>
+            <b>{t('results.r3.label')}</b>
           </div>
           <div>
             <span>04</span>
-            <p>“They are asking questions I haven’t heard before.”</p>
-            <b>Curiosity & confidence</b>
+            <p>{t('results.r4.quote')}</p>
+            <b>{t('results.r4.label')}</b>
           </div>
         </div>
       </div>

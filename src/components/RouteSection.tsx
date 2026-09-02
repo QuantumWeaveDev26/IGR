@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -8,13 +9,14 @@ export const RouteSection: React.FC = () => {
   const [activeStation, setActiveStation] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const atlasRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   const stations = [
-    { id: '01', title: 'Understand', desc: 'Concepts, not answers to memorise.', class: 's1' },
-    { id: '02', title: 'Explore', desc: 'Stories, visuals and examples.', class: 's2' },
-    { id: '03', title: 'Practise', desc: 'Small challenges that build belief.', class: 's3' },
-    { id: '04', title: 'Reflect', desc: 'Learning that stays with them.', class: 's4' },
-    { id: '05', title: 'Grow', desc: 'Progress everyone can see.', class: 's5' },
+    { id: '01', titleKey: 'route.s1.title', descKey: 'route.s1.desc', class: 's1' },
+    { id: '02', titleKey: 'route.s2.title', descKey: 'route.s2.desc', class: 's2' },
+    { id: '03', titleKey: 'route.s3.title', descKey: 'route.s3.desc', class: 's3' },
+    { id: '04', titleKey: 'route.s4.title', descKey: 'route.s4.desc', class: 's4' },
+    { id: '05', titleKey: 'route.s5.title', descKey: 'route.s5.desc', class: 's5' },
   ];
 
   useEffect(() => {
@@ -44,14 +46,14 @@ export const RouteSection: React.FC = () => {
       <div className="wrap">
         <div className="route-title">
           <div>
-            <div className="eyebrow">03 / A route that changes with them</div>
+            <div className="eyebrow">{t('route.eyebrow')}</div>
             <h2>
-              One learner.
+              {t('route.heading1')}
               <br />
-              Many ways forward.
+              {t('route.heading2')}
             </h2>
           </div>
-          <p>Every learning journey draws from the same strong foundation, then adapts to the learner in front of it.</p>
+          <p>{t('route.copy')}</p>
         </div>
 
         <div className="route-atlas" ref={atlasRef}>
@@ -85,8 +87,8 @@ export const RouteSection: React.FC = () => {
               onClick={() => setActiveStation(i)}
             >
               <b>{st.id}</b>
-              <h3>{st.title}</h3>
-              <p>{st.desc}</p>
+              <h3>{t(st.titleKey)}</h3>
+              <p>{t(st.descKey)}</p>
             </div>
           ))}
         </div>

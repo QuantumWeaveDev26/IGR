@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { animate, stagger } from 'animejs';
+import { useLanguage } from '../context/LanguageContext';
 
 interface HeroProps {
   onOpenEarlyAccess: () => void;
@@ -10,6 +11,7 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onOpenEarlyAccess }) => {
   const heroRef = useRef<HTMLElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -56,14 +58,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenEarlyAccess }) => {
     <section className="hero" ref={heroRef}>
       <div className="wrap hero-grid">
         <div>
-          <div className="eyebrow">CBSE high school · learning, made personal</div>
+          <div className="eyebrow">{t('hero.eyebrow')}</div>
           <h1>
-            Every learner is different.
+            {t('hero.headline1')}
             <br />
-            <em>Why</em> is education the same?
+            <em>{t('hero.headline2')}</em> {t('hero.headline3')}
           </h1>
           <p className="hero-copy">
-            IGr is a hyper-personalized learning system that adapts to your child’s pace, strengths and way of understanding—so learning can finally feel like it belongs to them.
+            {t('hero.copy')}
           </p>
           <div className="cta-row">
             <button
@@ -71,21 +73,21 @@ export const Hero: React.FC<HeroProps> = ({ onOpenEarlyAccess }) => {
               className="btn btn-primary"
               onClick={onOpenEarlyAccess}
             >
-              Find your child’s learning route <span className="arrow">↗</span>
+              {t('hero.cta.primary')} <span className="arrow">↗</span>
             </button>
             <a className="btn" href="#journey">
-              Explore IGr <span className="arrow">↓</span>
+              {t('hero.cta.secondary')} <span className="arrow">↓</span>
             </a>
           </div>
           <div className="proof">
             <div>
-              <b>With APPU</b>A favourite guide for every learning moment
+              <b>{t('hero.proof.appu.label')}</b>{t('hero.proof.appu.text')}
             </div>
             <div>
-              <b>40 hours</b>Build a stronger learning foundation
+              <b>{t('hero.proof.hours.label')}</b>{t('hero.proof.hours.text')}
             </div>
             <div>
-              <b>AI-ready</b>Future skills, naturally included
+              <b>{t('hero.proof.ai.label')}</b>{t('hero.proof.ai.text')}
             </div>
           </div>
         </div>
@@ -96,25 +98,25 @@ export const Hero: React.FC<HeroProps> = ({ onOpenEarlyAccess }) => {
           id="learning-map"
           aria-label="Visual learning map"
         >
-          <div className="orbit-word w1">curiosity</div>
-          <div className="orbit-word w2">clarity</div>
-          <div className="orbit-word w3">confidence</div>
+          <div className="orbit-word w1">{t('hero.orbit.w1')}</div>
+          <div className="orbit-word w2">{t('hero.orbit.w2')}</div>
+          <div className="orbit-word w3">{t('hero.orbit.w3')}</div>
 
           <div className="route r1" />
           <div className="route r2" />
           <div className="route r3" />
 
           <div className="note n1">
-            <span className="eyebrow">Route 01</span>
-            <strong>See it</strong>Visual learner
+            <span className="eyebrow">{t('hero.route.r1.eyebrow')}</span>
+            <strong>{t('hero.route.r1.title')}</strong>{t('hero.route.r1.desc')}
           </div>
           <div className="note n2">
-            <span className="eyebrow">Route 02</span>
-            <strong>Try it</strong>Learn by doing
+            <span className="eyebrow">{t('hero.route.r2.eyebrow')}</span>
+            <strong>{t('hero.route.r2.title')}</strong>{t('hero.route.r2.desc')}
           </div>
           <div className="note n3">
-            <span className="eyebrow">Route 03</span>
-            <strong>Tell it</strong>Learn through stories
+            <span className="eyebrow">{t('hero.route.r3.eyebrow')}</span>
+            <strong>{t('hero.route.r3.title')}</strong>{t('hero.route.r3.desc')}
           </div>
 
           <div

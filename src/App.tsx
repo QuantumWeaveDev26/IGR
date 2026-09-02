@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { LanguageProvider } from './context/LanguageContext';
 import { ProgressRail } from './components/ProgressRail';
 import { CursorOrbit } from './components/CursorOrbit';
 import { Navbar } from './components/Navbar';
@@ -48,7 +49,7 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <LanguageProvider>
       <CursorOrbit />
       <ProgressRail />
       <main>
@@ -96,7 +97,7 @@ export const App: React.FC = () => {
         isOpen={isEarlyAccessOpen}
         onClose={() => setIsEarlyAccessOpen(false)}
       />
-    </>
+    </LanguageProvider>
   );
 };
 

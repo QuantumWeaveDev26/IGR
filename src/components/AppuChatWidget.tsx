@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { n8nClient } from '../lib/n8nClient';
+import { appuClient } from '../lib/appuClient';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Message {
   id: string;
   sender: 'appu' | 'user';
   text: string;
   timestamp: string;
+  audioSource?: string | null;
 }
 
 interface AppuChatWidgetProps {
@@ -13,6 +15,7 @@ interface AppuChatWidgetProps {
 }
 
 export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAccess }) => {
+  const { lang, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(1);
   const [role, setRole] = useState<'Student' | 'Parent'>('Student');
@@ -20,7 +23,7 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
     {
       id: 'msg-1',
       sender: 'appu',
-      text: "Namaste! 👋 I'm **APPU**, your AI Academic Mentor for CBSE Class 6 to 12. Ask me anything about your syllabus, math formulas, physics concepts, or exam prep! After every answer, I can also send notes straight to your WhatsApp or schedule a Google Calendar revision reminder for you. 🚀",
+      text: t('chat.welcome'),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -39,12 +42,8 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
   const chatBodyRef = useRef<HTMLDivElement>(null);
   const DEFAULT_AVATAR = '/images/appu_portrait.jpg';
 
-  const suggestedChips = [
-    "Class 10 Light & Optics",
-    "Class 9 Polynomials",
-    "Send notes to WhatsApp 📲",
-    "Set revision reminder 📅"
-  ];
+  // Audio player ref to guarantee strictly ONE voice plays at a time
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -102,13 +101,7 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
     }
   };
 
-  // Audio player ref to guarantee strictly ONE voice plays at a time
-  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
-
   const stopAllAudio = () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
     if (currentAudioRef.current) {
       currentAudioRef.current.pause();
       currentAudioRef.current.currentTime = 0;
@@ -116,39 +109,23 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
     }
   };
 
-  const speakText = async (text: string, forcePlay: boolean = false) => {
-    const cleanText = text.replace(/[*_#`~✦✳•]/g, '').trim();
-    if (!cleanText) return;
-
+  /**
+   * Play server-provided audio. NO browser TTS fallback.
+   */
+  const playAudio = async (audioSource: string | null | undefined, forcePlay: boolean = false) => {
+    if (!audioSource) return;
     if (voiceMuted && !forcePlay) return;
 
-    // 1. Immediately stop any currently playing audio or speech synthesis
+    // Stop any currently playing audio
     stopAllAudio();
 
     try {
-      // 2. Fetch APPU Voice Audio from live Hugging Face API Space
-      const audioUrl = await n8nClient.generateAppuVoice(cleanText);
-      
-      if (audioUrl) {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-        }
-        const audio = new Audio(audioUrl);
-        currentAudioRef.current = audio;
-        await audio.play();
-        return;
-      }
+      const audio = new Audio(audioSource);
+      currentAudioRef.current = audio;
+      await audio.play();
     } catch (err) {
-      console.warn('APPU Voice API error, falling back to speech synthesis:', err);
-    }
-
-    // Fallback: Browser Speech Synthesis ONLY if HF Voice API returns null
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.rate = 1.0;
-      utterance.pitch = 1.05;
-      window.speechSynthesis.speak(utterance);
+      console.warn('[APPU Widget] Audio playback failed (graceful):', err);
+      // Fail silently — no browser TTS fallback
     }
   };
 
@@ -202,12 +179,10 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
       const appuMsg: Message = {
         id: 'msg-' + (Date.now() + 1),
         sender: 'appu',
-        text: "Connecting you directly to IGr on WhatsApp...",
+        text: t('chat.waRedirect'),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, appuMsg]);
-      
-      if (!voiceMuted) speakText(appuMsg.text);
       
       setTimeout(() => {
         window.open("https://wa.me/919740595677?text=Hi%20IGr%2C%20I%20would%20like%20to%20know%20more%20about%20APPU%20for%20CBSE%20learning.", "_blank");
@@ -220,43 +195,38 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
       const appuMsg: Message = {
         id: 'msg-' + (Date.now() + 1),
         sender: 'appu',
-        text: "Connecting you with our CBSE Learning Specialist. Opening your discovery call modal now...",
+        text: t('chat.callRedirect'),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, appuMsg]);
-      
-      if (!voiceMuted) speakText(appuMsg.text);
       
       setTimeout(() => onOpenEarlyAccess(), 500);
       return;
     }
 
-    const sessionId = 'session_react_' + Date.now();
+    // Send message to secure APPU backend
     const fullQuery = `[Mode: ${role}] ${text}`;
-    const n8nResponse = await n8nClient.sendChatToAgent(fullQuery, sessionId);
+    const response = await appuClient.sendMessage(fullQuery, lang);
     setIsTyping(false);
 
-    let replyText = "";
-    if (n8nResponse && typeof n8nResponse === 'string' && n8nResponse.trim().length > 0) {
-      replyText = n8nResponse.trim();
-    } else {
-      if (role === 'Student') {
-        replyText = `Namaste! 🚀 That's a great question!\n\nIGr is designed around how you understand best—whether visually, through stories, or by trying things hands-on.\n\nInstead of a single fixed syllabus, every learner receives a **personalized learning route**.\n\nWould you like to explore your child's personalized route with a **FREE Discovery Call**?`;
-      } else {
-        replyText = `Namaste! 🌿 Thank you for asking. In our **Parent Framework** for CBSE high school preparation:\n\n• **Concept Mastery**: Diagnostic loops pinpoint exact understanding gaps.\n• **Adaptive Pace**: Study time focuses 100% on areas needing clarity.\n• **Transparent Progress**: Track learning milestones on your dashboard.\n\nWould you like to book a **1-on-1 Discovery Call** for a custom learning plan?`;
-      }
-    }
+    const replyText = (response.output && response.output.trim().length > 0)
+      ? response.output.trim()
+      : t('chat.errorFallback');
 
     const appuReply: Message = {
       id: 'msg-' + (Date.now() + 1),
       sender: 'appu',
       text: replyText,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      audioSource: response.audioSource,
     };
 
     setMessages((prev) => [...prev, appuReply]);
     
-    if (!voiceMuted) speakText(replyText);
+    // Play server-provided audio (no browser TTS)
+    if (!voiceMuted && response.audioSource) {
+      playAudio(response.audioSource);
+    }
     
     setXp((prev) => prev + 20);
   };
@@ -264,6 +234,9 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
   const containerStyle: React.CSSProperties = dragPos
     ? { left: `${dragPos.x}px`, top: `${dragPos.y}px`, bottom: 'auto', right: 'auto' }
     : { bottom: '24px', right: '24px' };
+
+  const roleLabel = role === 'Student' ? t('chat.student') : t('chat.parent');
+  const suggestedChips = [t('chat.chip1'), t('chat.chip2'), t('chat.chip3'), t('chat.chip4')];
 
   return (
     <div className="appu-widget-container" style={containerStyle}>
@@ -273,8 +246,8 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
         className="appu-float-bubble"
         onPointerDown={handlePointerDown}
         onClick={handleToggleClick}
-        title="Drag me anywhere or click to chat with APPU"
-        aria-label="Toggle APPU chat"
+        title={t('chat.dragTitle')}
+        aria-label={t('chat.toggleLabel')}
       >
         <img
           src={DEFAULT_AVATAR}
@@ -300,19 +273,19 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
                   className="mini-appu-avatar"
                   onError={handleImageError}
                 />
-                <span className="avatar-live-dot" title="online" />
+                <span className="avatar-live-dot" title={t('chat.online')} />
               </div>
               <div className="chat-header-titles">
                 <div className="chat-header-title">APPU</div>
                 <div className="chat-header-status-line">
-                  <span className="status-online-text">online</span>
+                  <span className="status-online-text">{t('chat.online')}</span>
                   <button
                     type="button"
                     className="role-tag-indicator"
                     onClick={toggleRole}
-                    title="Click to switch between Student and Parent mode"
+                    title={`Click to switch between ${t('chat.student')} and ${t('chat.parent')} mode`}
                   >
-                    {role} Mode · Switch ↺
+                    {roleLabel} {t('chat.modeSwitch')}
                   </button>
                 </div>
               </div>
@@ -326,15 +299,15 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
                   if (!voiceMuted) stopAllAudio();
                   setVoiceMuted(!voiceMuted);
                 }}
-                title={voiceMuted ? "Unmute Voice Audio" : "Mute Voice Audio"}
+                title={voiceMuted ? t('chat.muteTitle') : t('chat.unmuteTitle')}
               >
-                {voiceMuted ? 'Mute' : 'Audio 🔊'}
+                {voiceMuted ? t('chat.mute') : t('chat.audio')}
               </button>
               <button
                 type="button"
                 className="close-chat-btn"
                 onClick={() => setIsOpen(false)}
-                aria-label="Close Chat"
+                aria-label={t('chat.closeLabel')}
               >
                 &times;
               </button>
@@ -343,14 +316,14 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
 
           {/* Minimalist Streak & XP Bar */}
           <div className="chat-xp-bar">
-            <span>STREAK: {streak} DAYS</span>
+            <span>{t('chat.streak')}: {streak} {t('chat.days')}</span>
             <div className="xp-progress-wrapper">
               <div
                 className="xp-bar-fill"
                 style={{ width: `${Math.min(100, (xp % 500) / 5)}%` }}
               />
             </div>
-            <span>{xp} XP</span>
+            <span>{xp} {t('chat.xp')}</span>
           </div>
 
           {/* Chat Body */}
@@ -367,14 +340,14 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
                 )}
                 <div className="chat-bubble-content">
                   <div dangerouslySetInnerHTML={{ __html: formatMessageMarkdown(msg.text) }} />
-                  {msg.sender === 'appu' && (
+                  {msg.sender === 'appu' && msg.audioSource && (
                     <button
                       type="button"
                       className="chat-listen-btn"
-                      onClick={() => speakText(msg.text, true)}
-                      title="Listen to APPU's voice"
+                      onClick={() => playAudio(msg.audioSource, true)}
+                      title={t('chat.listenTitle')}
                     >
-                      🔊 Listen
+                      {t('chat.listen')}
                     </button>
                   )}
                   <span className="chat-msg-time">{msg.timestamp}</span>
@@ -391,7 +364,7 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
                   onError={handleImageError}
                 />
                 <div className="chat-bubble-content typing">
-                  <span>APPU is thinking...</span>
+                  <span>{t('chat.thinking')}</span>
                   <span className="typing-dots">
                     <span />
                     <span />
@@ -406,14 +379,14 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
           {showSuggestions ? (
             <div className="suggested-chips-container">
               <div className="suggested-chips-header">
-                <span className="suggested-chips-title">SUGGESTED QUESTIONS</span>
+                <span className="suggested-chips-title">{t('chat.suggestedTitle')}</span>
                 <button
                   type="button"
                   className="hide-chips-btn"
                   onClick={() => setShowSuggestions(false)}
-                  title="Hide suggestions for more chat space"
+                  title={t('chat.hideChips')}
                 >
-                  &times; Hide
+                  {t('chat.hideChips')}
                 </button>
               </div>
               <div className="suggested-chips">
@@ -435,9 +408,9 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
                 type="button"
                 className="reopen-chips-btn"
                 onClick={() => setShowSuggestions(true)}
-                title="Show suggested questions"
+                title={t('chat.showChips')}
               >
-                💡 Show Suggested Questions
+                {t('chat.showChips')}
               </button>
             </div>
           )}
@@ -450,13 +423,13 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Ask APPU anything about CBSE..."
+              placeholder={t('chat.placeholder')}
             />
             <button
               type="button"
               className="send-btn"
               onClick={() => handleSend()}
-              aria-label="Send message"
+              aria-label={t('chat.sendLabel')}
             >
               ➔
             </button>
@@ -487,4 +460,3 @@ function formatMessageMarkdown(text: string): string {
     .replace(/^[•\-]\s+(.*$)/gim, '<li style="margin-left:14px; list-style-type:disc;">$1</li>')
     .replace(/\n/g, '<br />');
 }
-
