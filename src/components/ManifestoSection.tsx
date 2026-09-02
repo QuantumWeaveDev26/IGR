@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animate, stagger } from 'animejs';
+import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,7 @@ export const ManifestoSection: React.FC = () => {
   const leadRef = useRef<HTMLParagraphElement>(null);
   const voicesRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -89,37 +91,37 @@ export const ManifestoSection: React.FC = () => {
     <section id="why" className="manifesto" ref={sectionRef}>
       <div className="wrap">
         <div className="manifesto-grid">
-          <div className="eyebrow">01 / The starting point</div>
+          <div className="eyebrow">{t('manifesto.eyebrow')}</div>
           <div>
             <h2 ref={headingRef}>
-              Your child isn’t average.
+              {t('manifesto.heading1')}
               <br />
-              <i>Why should their learning be?</i>
+              <i>{t('manifesto.heading2')}</i>
             </h2>
             <p className="lead" ref={leadRef}>
-              Some need a picture. Some need a story. Some need to try it first. Some simply need another explanation, at their own pace.
+              {t('manifesto.lead')}
             </p>
             <div className="voices" ref={voicesRef}>
-              <span>“Show me.”</span>
-              <span>“Tell me.”</span>
-              <span>“Let me try.”</span>
-              <span>“Give me time.”</span>
+              <span>{t('manifesto.voice1')}</span>
+              <span>{t('manifesto.voice2')}</span>
+              <span>{t('manifesto.voice3')}</span>
+              <span>{t('manifesto.voice4')}</span>
             </div>
           </div>
         </div>
 
         <div className="one-route">
-          <div className="route-label">The usual route</div>
+          <div className="route-label">{t('manifesto.trackLabel')}</div>
           <div className="track" ref={trackRef}>
             <span />
             <span />
             <span />
             <span />
             <span />
-            <b>One path for every learner</b>
+            <b>{t('manifesto.trackNote')}</b>
           </div>
           <div className="route-note">
-            When every learner is given the same route, confidence drops. Interest disappears. IGr changes that.
+            {t('manifesto.routeNote')}
           </div>
         </div>
       </div>

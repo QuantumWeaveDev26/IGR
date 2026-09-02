@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkle, CheckCircle, ArrowRight, ShieldCheck } from '@phosphor-icons/react';
+import { X, Sparkle, CheckCircle, ArrowRight, ShieldCheck, WarningCircle } from '@phosphor-icons/react';
 import { n8nClient } from '../lib/n8nClient';
+import { useLanguage } from '../context/LanguageContext';
 
 interface EarlyAccessModalProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface EarlyAccessModalProps {
 }
 
 export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onClose }) => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     parentName: '',
     studentName: '',
@@ -17,6 +19,7 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
   });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -37,8 +40,9 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage(null);
     
-    // Submit Lead to n8n Cloud Pipeline
+    // Submit Lead to secure APPU backend pipeline
     const leadPayload = {
       user_name: formData.parentName || formData.studentName || 'Parent',
       user_phone: formData.phone,
@@ -49,17 +53,22 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
       timestamp: new Date().toISOString()
     };
 
-    await n8nClient.submitLeadCapture(leadPayload);
+    const res = await n8nClient.submitLeadCapture(leadPayload);
     setIsSubmitting(false);
-    setSubmitted(true);
+
+    if (res && res.success) {
+      setSubmitted(true);
+    } else {
+      setErrorMessage(t('modal.ea.error'));
+    }
   };
 
   const handleReset = () => {
     setSubmitted(false);
+    setErrorMessage(null);
     setFormData({ parentName: '', studentName: '', email: '', phone: '', grade: 'Class 10' });
     onClose();
   };
-
 
   return (
     <div className="fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/75 backdrop-blur-md animate-fade-in">
@@ -74,7 +83,7 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
             <div className="w-8 h-8 rounded-lg bg-[#134340] text-white flex items-center justify-center text-sm">
               <Sparkle weight="fill" className="w-4 h-4 text-[#E2E0C8]" />
             </div>
-            <span>Apply for Early Access</span>
+            <span>{t('modal.ea.title')}</span>
           </div>
 
           <button
@@ -95,15 +104,15 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
 
               <div>
                 <h3 className="text-2xl font-extrabold text-slate-900 font-serif">
-                  Application Received!
+                  {t('modal.ea.successTitle')}
                 </h3>
                 <p className="text-xs text-emerald-700 font-semibold mt-1">
-                  ✓ Successfully saved & sent to counselor workflow
+                  {t('modal.ea.successSaved')}
                 </p>
               </div>
 
               <p className="text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
-                Thank you, <strong className="text-slate-900">{formData.parentName || 'Parent'}</strong>. Our academic counselor will reach out shortly to schedule your FREE Discovery Call.
+                {t('modal.ea.successThank')} <strong className="text-slate-900">{formData.parentName || 'Parent'}</strong>. {t('modal.ea.successMsg')}
               </p>
 
               <div className="pt-2 space-y-3">
@@ -116,7 +125,7 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
                   className="w-full py-3.5 px-5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm tracking-wide shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   <Sparkle weight="fill" className="w-4 h-4 text-emerald-300" />
-                  <span>Connect Instantly on WhatsApp</span>
+                  <span>{t('modal.ea.connectWa')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
 
@@ -125,40 +134,53 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
                   onClick={handleReset}
                   className="w-full py-3 px-4 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm transition-all cursor-pointer"
                 >
-                  Done
+                  {t('modal.ea.done')}
                 </button>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 text-left">
               <div className="text-xs text-slate-500 font-medium mb-2">
-                Book a 1-on-1 FREE Discovery Call to see how APPU hyper-personalizes CBSE learning for your child.
+                {t('modal.ea.desc')}
               </div>
+
+              {errorMessage && (
+                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
+                  <WarningCircle weight="fill" className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div className="flex-1 leading-relaxed">{errorMessage}</div>
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-                  Parent / Guardian Name *
+                  {t('modal.ea.parentName')}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Ramesh Sharma"
+                  placeholder={t('modal.ea.parentPlaceholder')}
                   value={formData.parentName}
-                  onChange={(e) => setFormData({ ...formData, parentName: e.target.value })}
+                  onChange={(e) => {
+                    setErrorMessage(null);
+                    setFormData({ ...formData, parentName: e.target.value });
+                  }}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-slate-800 focus:outline-none bg-[#FAF9F6]"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-                  Student Name *
+                  {t('modal.ea.studentName')}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Aarav Sharma"
+                  placeholder={t('modal.ea.studentPlaceholder')}
                   value={formData.studentName}
-                  onChange={(e) => setFormData({ ...formData, studentName: e.target.value })}
+                  onChange={(e) => {
+                    setErrorMessage(null);
+                    setFormData({ ...formData, studentName: e.target.value });
+                  }}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-slate-800 focus:outline-none bg-[#FAF9F6]"
                 />
               </div>
@@ -166,21 +188,24 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-                    WhatsApp Phone *
+                    {t('modal.ea.phone')}
                   </label>
                   <input
                     type="tel"
                     required
-                    placeholder="+91 98765 43210"
+                    placeholder={t('modal.ea.phonePlaceholder')}
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    onChange={(e) => {
+                      setErrorMessage(null);
+                      setFormData({ ...formData, phone: e.target.value });
+                    }}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-slate-800 focus:outline-none bg-[#FAF9F6]"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-                    CBSE Class *
+                    {t('modal.ea.grade')}
                   </label>
                   <select
                     value={formData.grade}
@@ -198,13 +223,16 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
 
               <div>
                 <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-                  Email Address
+                  {t('modal.ea.email')}
                 </label>
                 <input
                   type="email"
-                  placeholder="parent@example.com"
+                  placeholder={t('modal.ea.emailPlaceholder')}
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) => {
+                    setErrorMessage(null);
+                    setFormData({ ...formData, email: e.target.value });
+                  }}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-slate-800 focus:outline-none bg-[#FAF9F6]"
                 />
               </div>
@@ -215,14 +243,14 @@ export const EarlyAccessModal: React.FC<EarlyAccessModalProps> = ({ isOpen, onCl
                   disabled={isSubmitting}
                   className="w-full py-4 px-6 rounded-xl bg-[#264538] hover:bg-[#1b3228] text-white font-bold text-sm tracking-wide shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <span>{isSubmitting ? 'Sending Application...' : 'Submit Application'}</span>
+                  <span>{isSubmitting ? t('modal.ea.submitting') : t('modal.ea.submit')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
 
               <div className="flex items-center gap-1.5 text-[11px] text-slate-400 justify-center font-mono pt-1">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>100% Confidential • Zero Spam Guarantee</span>
+                <span>{t('modal.ea.privacy')}</span>
               </div>
             </form>
           )}
