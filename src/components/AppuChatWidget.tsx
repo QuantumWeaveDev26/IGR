@@ -42,9 +42,6 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
   const chatBodyRef = useRef<HTMLDivElement>(null);
   const DEFAULT_AVATAR = '/images/appu_portrait.jpg';
 
-  // Audio player ref to guarantee strictly ONE voice plays at a time
-  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
-
   const scrollToBottom = () => {
     setTimeout(() => {
       if (chatBodyRef.current) {
@@ -59,6 +56,13 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
       scrollToBottom();
     }
   }, [isOpen, messages]);
+
+  // Clean up audio on unmount
+  useEffect(() => {
+    return () => {
+      appuClient.stopAllAudio();
+    };
+  }, []);
 
   const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     isDraggingRef.current = false;
@@ -101,32 +105,20 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
     }
   };
 
-  const stopAllAudio = () => {
-    if (currentAudioRef.current) {
-      currentAudioRef.current.pause();
-      currentAudioRef.current.currentTime = 0;
-      currentAudioRef.current = null;
-    }
-  };
-
   /**
-   * Play server-provided audio. NO browser TTS fallback.
+   * Play server-provided audio (English or ElevenLabs v3 Kannada inline Base64).
+   * Strictly NO browser / system TTS fallback.
    */
-  const playAudio = async (audioSource: string | null | undefined, forcePlay: boolean = false) => {
+  const playAudio = async (audioSource?: string | null, forcePlay: boolean = false) => {
     if (!audioSource) return;
     if (voiceMuted && !forcePlay) return;
 
-    // Stop any currently playing audio
-    stopAllAudio();
-
-    try {
-      const audio = new Audio(audioSource);
-      currentAudioRef.current = audio;
-      await audio.play();
-    } catch (err) {
-      console.warn('[APPU Widget] Audio playback failed (graceful):', err);
-      // Fail silently — no browser TTS fallback
-    }
+    await appuClient.playAudio({
+      audioSource,
+      onError: (err) => {
+        console.warn('[APPU Widget] Server audio playback error (graceful):', err);
+      }
+    });
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -204,7 +196,7 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
       return;
     }
 
-    // Send message to secure APPU backend
+    // Send message to dedicated IGR APPU backend endpoint
     const fullQuery = `[Mode: ${role}] ${text}`;
     const response = await appuClient.sendMessage(fullQuery, lang);
     setIsTyping(false);
@@ -218,12 +210,12 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
       sender: 'appu',
       text: replyText,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      audioSource: response.audioSource,
+      audioSource: response.audioSource
     };
 
     setMessages((prev) => [...prev, appuReply]);
     
-    // Play server-provided audio (no browser TTS)
+    // Play server-provided inline audio (no browser TTS)
     if (!voiceMuted && response.audioSource) {
       playAudio(response.audioSource);
     }
@@ -296,7 +288,7 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
                 type="button"
                 className="voice-toggle-btn"
                 onClick={() => {
-                  if (!voiceMuted) stopAllAudio();
+                  if (!voiceMuted) appuClient.stopAllAudio();
                   setVoiceMuted(!voiceMuted);
                 }}
                 title={voiceMuted ? t('chat.muteTitle') : t('chat.unmuteTitle')}
