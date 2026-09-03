@@ -1,6 +1,6 @@
 import { test, describe, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildServer } from '../src/index.js';
+import { buildServer } from '../src/app.js';
 import { N8nClient, type N8nMessageEnvelope, type N8nMessageResponse } from '../src/services/n8n-client.js';
 import { resetRateLimits } from '../src/security/rate-limit.js';
 
@@ -185,5 +185,16 @@ describe('IGR Dedicated Server Gateway (POST /api/appu/message)', () => {
     });
 
     assert.equal(res.statusCode, 400);
+  });
+
+  test('Health route: GET /health returns 200 {"status":"ok"}', async () => {
+    const app = buildServer({ NODE_ENV: 'test' });
+    const res = await app.inject({
+      method: 'GET',
+      url: '/health'
+    });
+
+    assert.equal(res.statusCode, 200);
+    assert.deepEqual(JSON.parse(res.body), { status: 'ok' });
   });
 });

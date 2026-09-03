@@ -2,7 +2,10 @@ import { z } from 'zod';
 
 export const configSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  PORT: z.coerce.number().int().min(1).max(65535).default(3001),
+  PORT: z.preprocess(
+    (val) => (val === '' || val === undefined ? 3000 : Number(val)),
+    z.number().int().min(1).max(65535)
+  ).default(3000),
   HOST: z.string().default('0.0.0.0'),
   CORS_ALLOWED_ORIGIN: z.string().default('https://igr.academy'),
   N8N_APPU_WEBHOOK_URL: z.string().url().default('https://n8n.srv999745.hstgr.cloud/webhook/appu-chat'),
