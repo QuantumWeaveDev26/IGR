@@ -194,6 +194,9 @@ const translations: Record<Lang, Record<string, string>> = {
     'chat.listenTitle': "Listen to APPU's voice",
     'chat.closeLabel': 'Close Chat',
     'chat.sendLabel': 'Send message',
+    'chat.calloutTitle': 'APPU is Online',
+    'chat.calloutPrompt': 'Chat with AI Mentor 👋',
+    'chat.calloutDismiss': 'Dismiss callout',
   },
 
   kn: {
@@ -383,6 +386,9 @@ const translations: Record<Lang, Record<string, string>> = {
     'chat.listenTitle': 'APPU ಧ್ವನಿ ಕೇಳಿ',
     'chat.closeLabel': 'ಚಾಟ್ ಮುಚ್ಚಿ',
     'chat.sendLabel': 'ಸಂದೇಶ ಕಳುಹಿಸಿ',
+    'chat.calloutTitle': 'ಅಪ್ಪು ಆನ್‌ಲೈನ್',
+    'chat.calloutPrompt': 'AI ಸಹಾಯಕ 👋',
+    'chat.calloutDismiss': 'ಮುಚ್ಚು',
   },
 };
 

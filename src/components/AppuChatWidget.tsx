@@ -66,8 +66,8 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
 
   const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     isDraggingRef.current = false;
-    const initialX = dragPos ? dragPos.x : (window.innerWidth - 84);
-    const initialY = dragPos ? dragPos.y : (window.innerHeight - 84);
+    const initialX = dragPos ? dragPos.x : (window.innerWidth - 96);
+    const initialY = dragPos ? dragPos.y : (window.innerHeight - 104);
 
     dragStartRef.current = {
       x: e.clientX,
@@ -225,13 +225,34 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
 
   const containerStyle: React.CSSProperties = dragPos
     ? { left: `${dragPos.x}px`, top: `${dragPos.y}px`, bottom: 'auto', right: 'auto' }
-    : { bottom: '24px', right: '24px' };
+    : { bottom: '44px', right: '36px' };
 
   const roleLabel = role === 'Student' ? t('chat.student') : t('chat.parent');
   const suggestedChips = [t('chat.chip1'), t('chat.chip2'), t('chat.chip3'), t('chat.chip4')];
 
   return (
     <div className="appu-widget-container" style={containerStyle}>
+      {/* Callout Header Pill Above Floating Bubble (Constant, No Dismiss) */}
+      {!isOpen && (
+        <div
+          className="appu-callout-pill"
+          onClick={() => setIsOpen(true)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setIsOpen(true)}
+          title={t('chat.toggleLabel')}
+        >
+          <div className="callout-pill-body">
+            <div className="callout-status-row">
+              <span className="callout-live-dot" />
+              <span className="callout-status-text">{t('chat.calloutTitle')}</span>
+            </div>
+            <div className="callout-prompt-text">{t('chat.calloutPrompt')}</div>
+          </div>
+          <span className="callout-pointer-arrow" aria-hidden="true" />
+        </div>
+      )}
+
       {/* Draggable Floating Trigger Bubble */}
       <button
         type="button"

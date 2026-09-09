@@ -52,11 +52,8 @@ export const App: React.FC = () => {
     <LanguageProvider>
       <CursorOrbit />
       <ProgressRail />
+      <Navbar onOpenEarlyAccess={() => setIsEarlyAccessOpen(true)} />
       <main>
-        <div className="wrap">
-          <Navbar onOpenEarlyAccess={() => setIsEarlyAccessOpen(true)} />
-        </div>
-
         {/* Section 00: Hero & Interactive Route Map */}
         <Hero
           onOpenEarlyAccess={() => setIsEarlyAccessOpen(true)}
