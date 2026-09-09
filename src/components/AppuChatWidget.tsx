@@ -34,10 +34,70 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
   const [streak, setStreak] = useState(3);
   const [showSuggestions, setShowSuggestions] = useState(true);
 
-  // Drag State for Floating Assistant
-  const [dragPos, setDragPos] = useState<{ x: number; y: number } | null>(null);
-  const isDraggingRef = useRef(false);
-  const dragStartRef = useRef<{ x: number; y: number; posX: number; posY: number }>({ x: 0, y: 0, posX: 0, posY: 0 });
+  // Audio synthesizer for crisp open/close UI chimes
+  const playChimeSound = (type: 'open' | 'close') => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (type === 'open') {
+        // Crisp, friendly ascending chime (520Hz -> 784Hz)
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(784, now + 0.08);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.12, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+        osc.start(now);
+        osc.stop(now + 0.18);
+      } else {
+        // Soft, gentle descending close tone (480Hz -> 260Hz)
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(480, now);
+        osc.frequency.exponentialRampToValueAtTime(260, now + 0.08);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.09, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+        osc.start(now);
+        osc.stop(now + 0.14);
+      }
+    } catch {
+      // Audio playback fails gracefully if browser audio is unavailable
+    }
+  };
+
+  const openChat = () => {
+    setIsOpen(true);
+    playChimeSound('open');
+  };
+
+  const closeChat = () => {
+    setIsOpen(false);
+    playChimeSound('close');
+  };
+
+  const toggleChat = () => {
+    if (isOpen) {
+      closeChat();
+    } else {
+      openChat();
+    }
+  };
 
   const chatBodyRef = useRef<HTMLDivElement>(null);
   const DEFAULT_AVATAR = '/images/appu_portrait.jpg';
@@ -63,47 +123,6 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
       appuClient.stopAllAudio();
     };
   }, []);
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    isDraggingRef.current = false;
-    const initialX = dragPos ? dragPos.x : (window.innerWidth - 96);
-    const initialY = dragPos ? dragPos.y : (window.innerHeight - 104);
-
-    dragStartRef.current = {
-      x: e.clientX,
-      y: e.clientY,
-      posX: initialX,
-      posY: initialY
-    };
-
-    const handlePointerMove = (moveEvent: PointerEvent) => {
-      const dx = moveEvent.clientX - dragStartRef.current.x;
-      const dy = moveEvent.clientY - dragStartRef.current.y;
-
-      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-        isDraggingRef.current = true;
-      }
-
-      const newX = Math.max(12, Math.min(window.innerWidth - 72, dragStartRef.current.posX + dx));
-      const newY = Math.max(12, Math.min(window.innerHeight - 72, dragStartRef.current.posY + dy));
-
-      setDragPos({ x: newX, y: newY });
-    };
-
-    const handlePointerUp = () => {
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerUp);
-    };
-
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('pointerup', handlePointerUp);
-  };
-
-  const handleToggleClick = () => {
-    if (!isDraggingRef.current) {
-      setIsOpen(!isOpen);
-    }
-  };
 
   /**
    * Play server-provided audio (English or ElevenLabs v3 Kannada inline Base64).
@@ -223,23 +242,19 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
     setXp((prev) => prev + 20);
   };
 
-  const containerStyle: React.CSSProperties = dragPos
-    ? { left: `${dragPos.x}px`, top: `${dragPos.y}px`, bottom: 'auto', right: 'auto' }
-    : { bottom: '44px', right: '36px' };
-
   const roleLabel = role === 'Student' ? t('chat.student') : t('chat.parent');
   const suggestedChips = [t('chat.chip1'), t('chat.chip2'), t('chat.chip3'), t('chat.chip4')];
 
   return (
-    <div className="appu-widget-container" style={containerStyle}>
+    <div className="appu-widget-container">
       {/* Callout Header Pill Above Floating Bubble (Constant, No Dismiss) */}
       {!isOpen && (
         <div
           className="appu-callout-pill"
-          onClick={() => setIsOpen(true)}
+          onClick={openChat}
           role="button"
           tabIndex={0}
-          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setIsOpen(true)}
+          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && openChat()}
           title={t('chat.toggleLabel')}
         >
           <div className="callout-pill-body">
@@ -253,13 +268,12 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
         </div>
       )}
 
-      {/* Draggable Floating Trigger Bubble */}
+      {/* Constant Floating Trigger Bubble */}
       <button
         type="button"
         className="appu-float-bubble"
-        onPointerDown={handlePointerDown}
-        onClick={handleToggleClick}
-        title={t('chat.dragTitle')}
+        onClick={toggleChat}
+        title={t('chat.toggleLabel')}
         aria-label={t('chat.toggleLabel')}
       >
         <img
@@ -321,7 +335,7 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
               <button
                 type="button"
                 className="close-chat-btn"
-                onClick={() => setIsOpen(false)}
+                onClick={closeChat}
                 aria-label={t('chat.closeLabel')}
               >
                 &times;

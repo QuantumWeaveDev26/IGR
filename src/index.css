@@ -1100,13 +1100,14 @@ section {
   max-width: 400px;
 }
 
-/* APPU AI CHAT WIDGET STYLES (DRAGGABLE & WHATSAPP WALLPAPER) */
+/* APPU AI CHAT WIDGET STYLES (CONSTANT FIXED POSITION) */
 .appu-widget-container {
   position: fixed;
+  bottom: 44px;
+  right: 36px;
   z-index: 9999;
   font-family: var(--sans);
   box-sizing: border-box;
-  touch-action: none;
 }
 
 /* CALLOUT HEADER PILL (ABOVE FLOATING BUBBLE) */
@@ -1217,7 +1218,7 @@ section {
   background: var(--forest);
   border: 2px solid var(--ink);
   box-shadow: 4px 6px 0 var(--ink);
-  cursor: grab;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1227,8 +1228,14 @@ section {
   user-select: none;
 }
 
+.appu-float-bubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 8px 0 var(--ink);
+}
+
 .appu-float-bubble:active {
-  cursor: grabbing;
+  transform: translateY(1px);
+  box-shadow: 2px 3px 0 var(--ink);
 }
 
 .appu-float-bubble:before {
