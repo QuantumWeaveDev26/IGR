@@ -175,7 +175,7 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, appuMsg]);
-      
+
       setTimeout(() => {
         window.open("https://wa.me/919740595677?text=Hi%20IGr%2C%20I%20would%20like%20to%20know%20more%20about%20APPU%20for%20CBSE%20learning.", "_blank");
       }, 500);
@@ -191,7 +191,7 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, appuMsg]);
-      
+
       setTimeout(() => onOpenEarlyAccess(), 500);
       return;
     }
@@ -214,12 +214,12 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
     };
 
     setMessages((prev) => [...prev, appuReply]);
-    
+
     // Play server-provided inline audio (no browser TTS)
     if (!voiceMuted && response.audioSource) {
       playAudio(response.audioSource);
     }
-    
+
     setXp((prev) => prev + 20);
   };
 
@@ -289,8 +289,10 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
                 <span className="avatar-live-dot" title={t('chat.online')} />
               </div>
               <div className="chat-header-titles">
-                <div className="chat-header-title">APPU</div>
+                <div className="chat-header-title">{t('chat.headerTitle')}</div>
                 <div className="chat-header-status-line">
+                  <span className="chat-header-subtitle">{t('chat.headerSubtitle')}</span>
+                  <span className="status-separator">·</span>
                   <span className="status-online-text">{t('chat.online')}</span>
                   <button
                     type="button"

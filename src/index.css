@@ -236,16 +236,27 @@ section, [id] {
 /* HERO SECTION */
 .hero {
   min-height: calc(100vh - 80px);
-  max-height: 860px;
   position: relative;
   padding: 44px 0 36px;
   border-bottom: 1px solid var(--line);
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   overflow-x: hidden !important;
   box-sizing: border-box;
+}
+
+@media (min-width: 821px) and (min-height: 720px) {
+  .hero {
+    justify-content: center;
+    max-height: 860px;
+  }
+}
+
+.hero .eyebrow {
+  display: block;
+  margin-bottom: 8px;
 }
 
 .hero-grid {
@@ -1361,11 +1372,12 @@ section {
 }
 
 .chat-header-title {
-  font: 700 17px/1.1 var(--serif);
+  font: 700 15px/1.2 var(--sans);
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.01em;
 }
 
 .chat-header-status-line {
@@ -1373,6 +1385,17 @@ section {
   align-items: center;
   gap: 6px;
   margin-top: 2px;
+}
+
+.chat-header-subtitle {
+  font: 500 11px/1 var(--sans);
+  color: rgba(255, 255, 255, 0.82);
+  white-space: nowrap;
+}
+
+.status-separator {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 10px;
 }
 
 .status-online-text {
@@ -1836,8 +1859,12 @@ section {
     margin-top: 4px;
   }
   .hero {
-    padding-top: 36px !important;
-    min-height: auto;
+    display: block !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    padding-top: 32px !important;
+    padding-bottom: 36px !important;
   }
   .hero-grid {
     grid-template-columns: 1fr;
@@ -1988,7 +2015,12 @@ section {
     font-size: 11px !important;
   }
   .hero {
-    padding-top: 36px !important;
+    display: block !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    padding-top: 28px !important;
+    padding-bottom: 36px !important;
   }
   .hero h1 {
     font-size: 32px;
