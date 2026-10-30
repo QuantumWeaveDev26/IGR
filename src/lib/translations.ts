@@ -199,6 +199,9 @@ const translations: Record<Lang, Record<string, string>> = {
     'chat.calloutTitle': 'Chat with APPU AI',
     'chat.calloutPrompt': 'IGr Academic Mentor 🎓',
     'chat.calloutDismiss': 'Dismiss callout',
+    'chat.siteTitle': 'APPU AI app',
+    'chat.sitePrompt': 'Learn with Appu at appuai.online',
+    'chat.siteLabel': 'Open the APPU AI app at appuai.online in a new tab',
   },
 
   kn: {
@@ -393,6 +396,9 @@ const translations: Record<Lang, Record<string, string>> = {
     'chat.calloutTitle': 'APPU AI ಜೊತೆ ಚಾಟ್ ಮಾಡಿ',
     'chat.calloutPrompt': 'IGr ಶೈಕ್ಷಣಿಕ ಮಾರ್ಗದರ್ಶಕ 🎓',
     'chat.calloutDismiss': 'ಮುಚ್ಚು',
+    'chat.siteTitle': 'APPU AI ಆ್ಯಪ್',
+    'chat.sitePrompt': 'appuai.online ನಲ್ಲಿ Appu ಜೊತೆ ಕಲಿಯಿರಿ',
+    'chat.siteLabel': 'appuai.online ನಲ್ಲಿ APPU AI ಆ್ಯಪ್ ಅನ್ನು ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ',
   },
 };
 

@@ -249,22 +249,39 @@ export const AppuChatWidget: React.FC<AppuChatWidgetProps> = ({ onOpenEarlyAcces
     <div className="appu-widget-container">
       {/* Callout Header Pill Above Floating Bubble (Constant, No Dismiss) */}
       {!isOpen && (
-        <div
-          className="appu-callout-pill"
-          onClick={openChat}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && openChat()}
-          title={t('chat.toggleLabel')}
-        >
-          <div className="callout-pill-body">
-            <div className="callout-status-row">
-              <span className="callout-live-dot" />
-              <span className="callout-status-text">{t('chat.calloutTitle')}</span>
+        <div className="appu-pill-stack">
+          {/* Link out to the full APPU AI app (appuai.online), stacked above the chat callout */}
+          <a
+            className="appu-site-pill"
+            href="https://appuai.online"
+            target="_blank"
+            rel="noopener"
+            aria-label={t('chat.siteLabel')}
+            title={t('chat.siteLabel')}
+          >
+            <div className="callout-pill-body">
+              <span className="site-pill-title">{t('chat.siteTitle')}</span>
+              <span className="callout-prompt-text">{t('chat.sitePrompt')}</span>
             </div>
-            <div className="callout-prompt-text">{t('chat.calloutPrompt')}</div>
+            <span className="site-pill-arrow" aria-hidden="true">↗</span>
+          </a>
+          <div
+            className="appu-callout-pill"
+            onClick={openChat}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && openChat()}
+            title={t('chat.toggleLabel')}
+          >
+            <div className="callout-pill-body">
+              <div className="callout-status-row">
+                <span className="callout-live-dot" />
+                <span className="callout-status-text">{t('chat.calloutTitle')}</span>
+              </div>
+              <div className="callout-prompt-text">{t('chat.calloutPrompt')}</div>
+            </div>
+            <span className="callout-pointer-arrow" aria-hidden="true" />
           </div>
-          <span className="callout-pointer-arrow" aria-hidden="true" />
         </div>
       )}
 

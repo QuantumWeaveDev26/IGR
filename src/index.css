@@ -1136,6 +1136,65 @@ section {
   box-shadow: 4px 8px 0 var(--ink);
 }
 
+/* Pills stacked above the bubble: APPU AI app link on top, chat callout below it */
+.appu-pill-stack {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 10;
+}
+
+.appu-pill-stack .appu-callout-pill {
+  position: relative;
+  bottom: auto;
+  right: auto;
+}
+
+.appu-site-pill {
+  background: var(--forest);
+  color: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 4px 6px 0 var(--ink);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  text-decoration: none;
+  animation: callout-pop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.appu-site-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 8px 0 var(--ink);
+}
+
+.appu-site-pill:focus-visible {
+  outline: 3px solid var(--tomato);
+  outline-offset: 3px;
+}
+
+.appu-site-pill .callout-prompt-text {
+  color: #ffffff;
+}
+
+.site-pill-title {
+  font: 700 11px/1 var(--sans);
+  color: #f6c453;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.site-pill-arrow {
+  font: 700 16px/1 var(--sans);
+}
+
 .callout-pill-body {
   display: flex;
   flex-direction: column;
@@ -2070,6 +2129,9 @@ section {
   }
   .appu-callout-pill {
     right: 0;
+    max-width: calc(100vw - 40px);
+  }
+  .appu-site-pill {
     max-width: calc(100vw - 40px);
   }
   .appu-chat-window {
